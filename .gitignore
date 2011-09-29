@@ -1,0 +1,7 @@
+*.user
+*.suo
+*.cache
+*.swp
+UIDemo/UIDemo/bin/
+UIDemo/UIDemo/obj/
+
