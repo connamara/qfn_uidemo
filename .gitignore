@@ -4,4 +4,5 @@
 *.swp
 UIDemo/UIDemo/bin/
 UIDemo/UIDemo/obj/
-
+UIDemo/UnitTests/bin/
+UIDemo/UnitTests/obj/

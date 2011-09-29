@@ -12,3 +12,4 @@ cd UIDemo
 set BUILD_CMD=MSBuild.exe uidemo.sln /t:%TARGET% /p:Configuration=%CONFIGURATION%;TargetFrameworkVersion=%NET_VERSION%
 echo Build command: %BUILD_CMD%
 %BUILD_CMD%
+cd ..
