@@ -6,11 +6,17 @@
     Width="300"
     >
     <Grid>
-        <Grid>
+        <StackPanel x:Name="ConnectionView" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <Label Content="SessionID:"/>
-                <Label x:Name="lblSessionID" Content="{Binding SessionIDString}"/>
+                <Label Content="{Binding SessionString}"/>
             </StackPanel>
-        </Grid>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Connected?"/>
+                <Label Content="{Binding ConnectionStatus}"/>
+            </StackPanel>
+            <Button x:Name="bttnConnect" Content="Connect" Command="{Binding ConnectCommand}"/>
+            <Button x:Name="bttnDisconnect" Content="Disconnect" Command="{Binding DisconnectCommand}"/>
+        </StackPanel>
     </Grid>
 </Window>

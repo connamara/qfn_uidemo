@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using QuickFix;
+using UIDemo.ViewModel;
 
 namespace UIDemo
 {
@@ -16,9 +17,7 @@ namespace UIDemo
     {
         public App()
             : base()
-        {
-
-        }
+        { }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
@@ -30,25 +29,18 @@ namespace UIDemo
         {
             Trace.WriteLine("Application started.");
 
-            if (e.Args.Length != 1)
-            {
-                string msg = "usage: UIDemo CONFIG_FILENAME";
-                MessageBox.Show(msg);
-                Trace.WriteLine(msg);
-                Trace.WriteLine("aborting.");
-                System.Environment.Exit(1);
-            }
+            MainWindowViewModel mainWindowVM = new MainWindowViewModel();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.DataContext = mainWindowVM;
+            mainWindow.ConnectionView.DataContext = mainWindowVM.ConnectionVM;
 
-            SessionSettings settings = new SessionSettings(e.Args[0]);
-
-
-            MainWindow mainWindow = new MainWindow(settings);
             mainWindow.Show();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             Trace.WriteLine("Application exit.");
+            this.Shutdown(0);
         }
     }
 }
