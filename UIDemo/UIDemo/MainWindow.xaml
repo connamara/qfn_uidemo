@@ -5,79 +5,115 @@
     Height="500"
     Width="500"
     >
-    <Grid>
-        <Grid.Resources>
+    
+    <Window.Resources>
+        <Style x:Key="FeatureTitle" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </Window.Resources>
 
-        </Grid.Resources>
-        
+    <!--DataContexts are assigned in App.xaml.cs-->
+
+    <Grid Background="#DDDDDD">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" x:Name="ConnectionView" Orientation="Vertical"> <!--DataContext assigned in App.xaml.cs-->
-            <StackPanel.Resources>
-                <Style x:Key="EnableIfConnected" TargetType="FrameworkElement">
-                    <Setter Property="FrameworkElement.IsEnabled" Value="False"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                            <Setter Property="FrameworkElement.IsEnabled" Value="True"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-                <Style x:Key="DisableIfConnected" TargetType="FrameworkElement">
-                    <Setter Property="FrameworkElement.IsEnabled" Value="False"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                            <Setter Property="FrameworkElement.IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Resources>
-            
-            <StackPanel Orientation="Horizontal">
-                <Label Content="SessionID:"/>
-                <Label Content="{Binding SessionString}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
+
+        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" Margin="5" Padding="5" Background="#EEEEEE" HorizontalAlignment="Center">
+            <StackPanel x:Name="ConnectionView" Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel.Resources>
-                    <Style x:Key="ConnectionStatusStyle" TargetType="Label">
-                        <Setter Property="Label.Content" Value="No"/>
+                    <Style x:Key="EnableIfConnected" TargetType="FrameworkElement">
+                        <Setter Property="FrameworkElement.IsEnabled" Value="False"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                <Setter Property="Label.Content" Value="Yes"/>
+                                <Setter Property="FrameworkElement.IsEnabled" Value="True"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="EnableIfDisconnected" TargetType="FrameworkElement">
+                        <Setter Property="FrameworkElement.IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                <Setter Property="FrameworkElement.IsEnabled" Value="False"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Resources>
-                <Label Content="Connected?"/>
-                <Label Style="{StaticResource ConnectionStatusStyle}"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                        <Label Content="SessionID:" FontWeight="Bold"/>
+                        <Label Content="Connected?" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <StackPanel.Resources>
+                            <Style x:Key="ConnectionStatusStyle" TargetType="Label">
+                                <Setter Property="Label.Content" Value="No"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                        <Setter Property="Label.Content" Value="Yes"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Label Content="{Binding SessionString}"/>
+                        <Label Style="{StaticResource ConnectionStatusStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="bttnConnect" Content="Connect" Width="80" Command="{Binding ConnectCommand}"
+                        Style="{StaticResource EnableIfDisconnected}"/>
+                    <Button x:Name="bttnDisconnect" Content="Disconnect" Width="80" Command="{Binding DisconnectCommand}"
+                        Style="{StaticResource EnableIfConnected}"/>
+                </StackPanel>
             </StackPanel>
-                
-            <Button x:Name="bttnConnect" Content="Connect" Command="{Binding ConnectCommand}"
-                    Style="{StaticResource DisableIfConnected}"/>
-            <Button x:Name="bttnDisconnect" Content="Disconnect" Command="{Binding DisconnectCommand}"
-                    Style="{StaticResource EnableIfConnected}"/>
-        </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="1" x:Name="NewsSenderView" Orientation="Vertical"> <!--DataContext assigned in App.xaml.cs-->
-            <Label Content="Send a News Message"/>
-            <Separator/>
-            
-            <Label Content="Specify a Headline"/>
-            <TextBox Text="{Binding Path=Headline, Mode=TwoWay}"/>
-            <Separator/>
-            
-            <Label Content="Specify lines, if any"/>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding Path=IsLine1Enabled, Mode=TwoWay}"/>
-                <Label Content="Line 1:"/>
-                <TextBox Text="{Binding Path=Line1Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine1Enabled}" Width="200"/>
-            </StackPanel>
-            
-            <Button Content="Send News Message" Command="{Binding Path=SendNewsCommand}"/>
+        <TabControl Grid.Row="1" Margin="5">
+            <TabItem Header="News">
+                <StackPanel x:Name="NewsSenderView" Orientation="Vertical">
+                    <Label Style="{StaticResource FeatureTitle}" Content="Send a News Message"/>
+                    
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Specify a Headline:" FontWeight="Bold"/>
+                        <TextBox Grid.Column="1" Text="{Binding Path=Headline, Mode=TwoWay}"/>
+                    </Grid>
+                    
+                    <Label Content="Specify lines (if desired):" FontWeight="Bold"/>
+                    
+                    <Border BorderThickness="1" BorderBrush="Silver" Margin="3" Padding="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <CheckBox Grid.Column="0" IsChecked="{Binding Path=IsLine1Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <Label Grid.Column="1" Content="Line 1:"/>
+                            <TextBox Grid.Column="2" Text="{Binding Path=Line1Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine1Enabled}"/>
+                        </Grid>
+                    </Border>
 
-        </StackPanel>
+                    <Button Content="Send The Message" Command="{Binding Path=SendNewsCommand}"
+                            MinWidth="10" HorizontalAlignment="Center" Margin="0,10,0,0"/>
 
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
