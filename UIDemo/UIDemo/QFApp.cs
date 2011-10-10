@@ -9,11 +9,18 @@ namespace UIDemo
 {
     public class QFApp : QuickFix.MessageCracker, QuickFix.Application
     {
-        ConnectionViewModel _connectionVM;
+        public ConnectionViewModel ConnectionVM { get; set; } // for a kludge
+        public QuickFix.SessionID SessionID { get; set; }
 
-        public QFApp(ConnectionViewModel connectionVM)
+        public QFApp()
         {
-            _connectionVM = connectionVM;
+            SessionID = null;
+        }
+
+        public void Send(QuickFix.Message m)
+        {
+            if (this.SessionID != null)
+                QuickFix.Session.SendToTarget(m, this.SessionID);
         }
 
         #region Application Members
@@ -26,6 +33,7 @@ namespace UIDemo
         public void FromApp(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("## FromApp: " + message.ToString());
+            Crack(message, sessionID);
         }
 
         public void OnCreate(QuickFix.SessionID sessionID)
@@ -35,14 +43,17 @@ namespace UIDemo
 
         public void OnLogon(QuickFix.SessionID sessionID)
         {
-            Trace.WriteLine("==OnLogon==");
-            _connectionVM.ConnectionStatus = "Connected";
+            this.SessionID = sessionID;
+            Trace.WriteLine(String.Format("==OnLogon: {0}==", this.SessionID.ToString()));
+            if (ConnectionVM != null)
+                ConnectionVM.IsConnected = true;
         }
 
         public void OnLogout(QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("==OnLogout==");
-            _connectionVM.ConnectionStatus = "Not connected";
+            if (ConnectionVM != null)
+                ConnectionVM.IsConnected = false;
         }
 
         public void ToAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)

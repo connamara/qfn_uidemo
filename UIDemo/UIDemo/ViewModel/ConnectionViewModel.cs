@@ -13,9 +13,9 @@ namespace UIDemo.ViewModel
     {
         private ConnectionModel _model = null;
 
-        public ConnectionViewModel()
+        public ConnectionViewModel(ConnectionModel cm)
         {
-            _model = new ConnectionModel(this);
+            _model = cm;
 
             // initialize SessionString
             HashSet<QuickFix.SessionID> sidset = _model.SessionSettings.GetSessions();
@@ -32,11 +32,11 @@ namespace UIDemo.ViewModel
             set { _session = value; base.OnPropertyChanged("SessionString"); }
         }
 
-        private string _connectionStatus = "no status";
-        public string ConnectionStatus
+        private bool _isConnected = false;
+        public bool IsConnected
         {
-            get { return _connectionStatus; }
-            set { _connectionStatus = value; base.OnPropertyChanged("ConnectionStatus"); }
+            get { return _isConnected; }
+            set { _isConnected = value; base.OnPropertyChanged("IsConnected"); }
         }
 
 
