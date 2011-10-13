@@ -67,5 +67,19 @@ namespace UIDemo
         }
 
         #endregion
+
+
+        // FIX40-41 don't have rejects
+        public void OnMessage(QuickFix.FIX42.BusinessMessageReject msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX43.BusinessMessageReject msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX44.BusinessMessageReject msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX50.BusinessMessageReject msg, QuickFix.SessionID s) { }
+
+        public void OnMessage(QuickFix.FIX40.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX41.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX42.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX43.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX44.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX50.ExecutionReport msg, QuickFix.SessionID s) { }
     }
 }

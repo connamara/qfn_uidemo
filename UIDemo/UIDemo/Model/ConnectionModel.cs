@@ -52,7 +52,8 @@ namespace UIDemo.Model
 
         public void SendNewsMessage(string headline_str, IList<string> lines)
         {
-            if(_qfapp.SessionID==null){
+            if (_qfapp.SessionID == null)
+            {
                 Trace.WriteLine("Can't send News message because SessionID is null.  Probably not connected?");
                 return;
             }
@@ -135,9 +136,45 @@ namespace UIDemo.Model
                     break;
 
                 default:
-                    Trace.WriteLine("FIX version unsupported: " + _qfapp.SessionID.BeginString);
+                    Trace.WriteLine("FIX version unsupported for type 'News': " + _qfapp.SessionID.BeginString);
                     return;
             }//end switch on BeginString
+
+            _qfapp.Send(m);
+        }
+
+        public void SendNewOrder(bool isBuy, string symbol, int orderQty)
+        {
+            if (_qfapp.SessionID == null)
+            {
+                Trace.WriteLine("Can't send News message because SessionID is null.  Probably not connected?");
+                return;
+            }
+
+            char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
+
+            QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
+            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.MANUAL_ORDER);
+            QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
+            QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
+            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.MARKET);
+            QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+
+            QuickFix.Fields.OrderQty fOrderQty = new QuickFix.Fields.OrderQty(orderQty);
+
+            QuickFix.Message m = null;
+            switch (_qfapp.SessionID.BeginString)
+            {
+                case QuickFix.FixValues.BeginString.FIX42:
+                    QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
+                        fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
+                    nos.OrderQty = fOrderQty;
+                    m = nos;
+                    break;
+                default:
+                    Trace.WriteLine("Orders are only supported in FIX.4.2 right now");
+                    return;
+            }
 
             _qfapp.Send(m);
         }

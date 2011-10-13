@@ -35,6 +35,7 @@ namespace UIDemo
             MainWindow mainWindow = new MainWindow();
             mainWindow.DataContext = mainWindowVM;
             mainWindow.ConnectionView.DataContext = mainWindowVM.ConnectionVM;
+            mainWindow.OrderView.DataContext = mainWindowVM.OrderVM;
             mainWindow.NewsSenderView.DataContext = mainWindowVM.NewsSenderVM;
 
             _connectionVM = mainWindowVM.ConnectionVM;
