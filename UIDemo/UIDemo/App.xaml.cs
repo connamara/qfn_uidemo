@@ -15,6 +15,8 @@ namespace UIDemo
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        ConnectionViewModel _connectionVM = null;
+
         public App()
             : base()
         { }
@@ -35,12 +37,17 @@ namespace UIDemo
             mainWindow.ConnectionView.DataContext = mainWindowVM.ConnectionVM;
             mainWindow.NewsSenderView.DataContext = mainWindowVM.NewsSenderVM;
 
+            _connectionVM = mainWindowVM.ConnectionVM;
+
             mainWindow.Show();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             Trace.WriteLine("Application exit.");
+
+            _connectionVM.DisconnectCommand.Execute(null);
+
             this.Shutdown(0);
         }
     }

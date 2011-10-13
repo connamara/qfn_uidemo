@@ -51,7 +51,7 @@ namespace UIDemo.ViewModel
             }
         }
 
-        private void Connect(object obj)
+        private void Connect(object ignored)
         {
             Trace.WriteLine("ConnectionViewModel::Connect called");
             _model.Connect();
@@ -70,7 +70,7 @@ namespace UIDemo.ViewModel
             }
         }
 
-        private void Disconnect(object obj)
+        private void Disconnect(object ignored)
         {
             Trace.WriteLine("ConnectionViewModel::Disconnect called");
             _model.Disconnect();
