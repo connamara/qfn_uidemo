@@ -97,15 +97,28 @@
                     
                     <Border BorderThickness="1" BorderBrush="Silver" Margin="3" Padding="5">
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             
-                            <CheckBox Grid.Column="0" IsChecked="{Binding Path=IsLine1Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
-                            <Label Grid.Column="1" Content="Line 1:"/>
-                            <TextBox Grid.Column="2" Text="{Binding Path=Line1Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine1Enabled}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=IsLine1Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="Line 1:"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Line1Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine1Enabled}"/>
+
+                            <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Path=IsLine2Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="Line 2:"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=Line2Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine2Enabled}"/>
+
+                            <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding Path=IsLine3Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="Line 3:"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=Line3Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine3Enabled}"/>
                         </Grid>
                     </Border>
 

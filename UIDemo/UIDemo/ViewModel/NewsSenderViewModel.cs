@@ -44,6 +44,34 @@ namespace UIDemo.ViewModel
             set { _isLine1Enabled = value; base.OnPropertyChanged("IsLine1Enabled"); }
         }
 
+        private string _line2Text = "";
+        public string Line2Text
+        {
+            get { return _line2Text; }
+            set { _line2Text = value; base.OnPropertyChanged("Line2Text"); }
+        }
+
+        private bool _isLine2Enabled = false;
+        public bool IsLine2Enabled
+        {
+            get { return _isLine2Enabled; }
+            set { _isLine2Enabled = value; base.OnPropertyChanged("IsLine2Enabled"); }
+        }
+
+        private string _line3Text = "";
+        public string Line3Text
+        {
+            get { return _line3Text; }
+            set { _line3Text = value; base.OnPropertyChanged("Line3Text"); }
+        }
+
+        private bool _isLine3Enabled = false;
+        public bool IsLine3Enabled
+        {
+            get { return _isLine3Enabled; }
+            set { _isLine3Enabled = value; base.OnPropertyChanged("IsLine3Enabled"); }
+        }
+
         // commands
         private void SendNews(object obj)
         {
@@ -52,6 +80,10 @@ namespace UIDemo.ViewModel
             IList<string> lines = new List<string>();
             if (this.IsLine1Enabled)
                 lines.Add(this.Line1Text);
+            if (this.IsLine2Enabled)
+                lines.Add(this.Line2Text);
+            if(this.IsLine3Enabled)
+                lines.Add(this.Line3Text);
 
             _model.SendNewsMessage(h, lines);
         }
