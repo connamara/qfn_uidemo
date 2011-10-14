@@ -15,7 +15,7 @@ namespace UIDemo
     /// </summary>
     public partial class App : System.Windows.Application
     {
-        ConnectionViewModel _connectionVM = null;
+        QFApp _qfapp = null;
 
         public App()
             : base()
@@ -31,14 +31,15 @@ namespace UIDemo
         {
             Trace.WriteLine("Application started.");
 
-            MainWindowViewModel mainWindowVM = new MainWindowViewModel();
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.DataContext = mainWindowVM;
-            mainWindow.ConnectionView.DataContext = mainWindowVM.ConnectionVM;
-            mainWindow.OrderView.DataContext = mainWindowVM.OrderVM;
-            mainWindow.NewsSenderView.DataContext = mainWindowVM.NewsSenderVM;
+            _qfapp = new QFApp();
 
-            _connectionVM = mainWindowVM.ConnectionVM;
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.DataContext = new MainWindowViewModel();
+
+            // TODO - pull these views out of MainWindow into their own xml files
+            mainWindow.ConnectionView.DataContext = new ConnectionViewModel(_qfapp);
+            mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
+            mainWindow.NewsSenderView.DataContext = new NewsSenderViewModel(_qfapp);
 
             mainWindow.Show();
         }
@@ -47,7 +48,7 @@ namespace UIDemo
         {
             Trace.WriteLine("Application exit.");
 
-            _connectionVM.DisconnectCommand.Execute(null);
+            _qfapp.Stop();
 
             this.Shutdown(0);
         }

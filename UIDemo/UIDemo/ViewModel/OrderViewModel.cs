@@ -11,16 +11,17 @@ namespace UIDemo.ViewModel
 {
     public class OrderViewModel : ViewModelBase
     {
-        private ConnectionModel _model = null;
+        private QFApp _qfapp = null;
 
         public ObservableCollection<OrderRecord> Orders { get; set; }
+
 
         public ICommand SendBuyCommand { get; set; }
         public ICommand SendSellCommand { get; set; }
 
-        public OrderViewModel(ConnectionModel cm)
+        public OrderViewModel(QFApp app)
         {
-            _model = cm;
+            _qfapp = app;
             Orders = new ObservableCollection<OrderRecord>();
 
             Orders.Add(new OrderRecord("aaa", "aaa", true, "x", 5.5m));
@@ -61,7 +62,7 @@ namespace UIDemo.ViewModel
             Trace.WriteLine(String.Format("Send NewOrder: Side={0} Symbol=[{1}] Qty=[{2}]",
                 (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQty));
 
-            _model.SendNewOrder(isBuy, this.Symbol, this.OrderQty);
+            _qfapp.SendNewOrder(isBuy, this.Symbol, this.OrderQty);
         }
     }
 }

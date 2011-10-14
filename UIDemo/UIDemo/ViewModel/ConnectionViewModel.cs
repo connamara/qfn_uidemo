@@ -11,18 +11,29 @@ namespace UIDemo.ViewModel
 {
     public class ConnectionViewModel : ViewModelBase
     {
-        private ConnectionModel _model = null;
+        private QFApp _qfapp = null;
 
-        public ConnectionViewModel(ConnectionModel cm)
+        public ICommand ConnectCommand {get;set;}
+        public ICommand DisconnectCommand {get;set;}
+
+
+        public ConnectionViewModel(QFApp app)
         {
-            _model = cm;
+            _qfapp = app;
 
             // initialize SessionString
-            HashSet<QuickFix.SessionID> sidset = _model.SessionSettings.GetSessions();
+            HashSet<QuickFix.SessionID> sidset = _qfapp.SessionSettings.GetSessions();
             Trace.WriteLine("Sessions count in config: " + sidset.Count);
             foreach (QuickFix.SessionID sid in sidset)
                 Trace.WriteLine("-> " + sid.ToString());
             this.SessionString = sidset.First().ToString();
+
+            // command definitions
+            ConnectCommand = new RelayCommand(Connect);
+            DisconnectCommand = new RelayCommand(Disconnect);
+
+            _qfapp.LogonEvent += new Action(delegate() { IsConnected = true; });
+            _qfapp.LogoffEvent += new Action(delegate() { IsConnected = false; });
         }
 
         private string _session = "";
@@ -39,41 +50,17 @@ namespace UIDemo.ViewModel
             set { _isConnected = value; base.OnPropertyChanged("IsConnected"); }
         }
 
-
-        private RelayCommand connectCommand;
-        public ICommand ConnectCommand
-        {
-            get
-            {
-                if (connectCommand == null)
-                    connectCommand = new RelayCommand(Connect);
-                return connectCommand;
-            }
-        }
-
+        // commands
         private void Connect(object ignored)
         {
             Trace.WriteLine("ConnectionViewModel::Connect called");
-            _model.Connect();
-            Trace.WriteLine("ConnectionViewModel::Connect finished");
-        }
-
-
-        private RelayCommand disconnectCommand;
-        public ICommand DisconnectCommand
-        {
-            get
-            {
-                if (disconnectCommand == null)
-                    disconnectCommand = new RelayCommand(Disconnect);
-                return disconnectCommand;
-            }
+            _qfapp.Start();
         }
 
         private void Disconnect(object ignored)
         {
             Trace.WriteLine("ConnectionViewModel::Disconnect called");
-            _model.Disconnect();
+            _qfapp.Stop();
         }
     }
 }

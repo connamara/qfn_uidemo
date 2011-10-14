@@ -10,13 +10,14 @@ namespace UIDemo.ViewModel
 {
     public class NewsSenderViewModel : ViewModelBase
     {
-        private ConnectionModel _model = null;
+        private QFApp _qfapp = null;
 
         public ICommand SendNewsCommand { get; set; }
 
-        public NewsSenderViewModel(ConnectionModel cm)
+
+        public NewsSenderViewModel(QFApp app)
         {
-            _model = cm;
+            _qfapp = app;
 
             // command definitions
             SendNewsCommand = new RelayCommand(SendNews);
@@ -85,8 +86,7 @@ namespace UIDemo.ViewModel
             if(this.IsLine3Enabled)
                 lines.Add(this.Line3Text);
 
-            _model.SendNewsMessage(h, lines);
+            _qfapp.SendNewsMessage(h, lines);
         }
-
     }
 }
