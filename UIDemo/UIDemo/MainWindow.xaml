@@ -142,7 +142,19 @@
                     </Grid>
                     
                     <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
-                        <TextBlock Background="White" Text="Orders will go here"/>
+                        <ListView IsSynchronizedWithCurrentItem="True"  ItemsSource="{Binding Path=Orders, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="ClOrdID" DisplayMemberBinding="{Binding Path=ClOrdID}"/>
+                                        <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Path=Symbol}"/>
+                                        <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
+                                        <GridViewColumn Header="OrdType" DisplayMemberBinding="{Binding Path=OrdType}"/>
+                                        <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Path=Price}"/>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Border>
 
                 </Grid>

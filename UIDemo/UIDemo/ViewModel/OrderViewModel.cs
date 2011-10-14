@@ -5,6 +5,7 @@ using System.Text;
 using UIDemo.Model;
 using System.Windows.Input;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace UIDemo.ViewModel
 {
@@ -12,12 +13,19 @@ namespace UIDemo.ViewModel
     {
         private ConnectionModel _model = null;
 
+        public ObservableCollection<OrderRecord> Orders { get; set; }
+
         public ICommand SendBuyCommand { get; set; }
         public ICommand SendSellCommand { get; set; }
 
         public OrderViewModel(ConnectionModel cm)
         {
             _model = cm;
+            Orders = new ObservableCollection<OrderRecord>();
+
+            Orders.Add(new OrderRecord("aaa", "aaa", true, "x", 5.5m));
+            Orders.Add(new OrderRecord("aaa", "aaa", true, "x", 5.5m));
+            Orders.Add(new OrderRecord("aaa", "aaa", true, "x", 5.5m));
 
             // command definitions
             SendBuyCommand = new RelayCommand(SendBuy);
