@@ -33,7 +33,7 @@ namespace UIDemo.ViewModel
             DisconnectCommand = new RelayCommand(Disconnect);
 
             _qfapp.LogonEvent += new Action(delegate() { IsConnected = true; });
-            _qfapp.LogoffEvent += new Action(delegate() { IsConnected = false; });
+            _qfapp.LogoutEvent += new Action(delegate() { IsConnected = false; });
         }
 
         private string _session = "";

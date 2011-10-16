@@ -13,7 +13,9 @@ namespace UIDemo
         public QuickFix.SessionSettings SessionSettings { get; set; }
 
         public event Action LogonEvent;
-        public event Action LogoffEvent;
+        public event Action LogoutEvent;
+
+        public event Action<QuickFix.FIX42.ExecutionReport> Fix42ExecReportEvent;
 
         private QuickFix.Initiator _initiator;
 
@@ -155,10 +157,17 @@ namespace UIDemo
             this.Send(m);
         }
 
-        public void SendNewOrder(bool isBuy, string symbol, int orderQty)
+        /// <summary>
+        /// Returns the message that is sent
+        /// </summary>
+        /// <param name="isBuy"></param>
+        /// <param name="symbol"></param>
+        /// <param name="orderQty"></param>
+        /// <returns></returns>
+        public QuickFix.Message SendNewOrder(bool isBuy, string symbol, int orderQty)
         {
             if (CanSendMessage() == false)
-                return;
+                throw new Exception("Couldn't send it");
 
             char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
 
@@ -182,10 +191,11 @@ namespace UIDemo
                     break;
                 default:
                     Trace.WriteLine("Orders are only supported in FIX.4.2 right now");
-                    return;
+                    throw new Exception("Couldn't send it");
             }
 
             this.Send(m);
+            return m;
         }
 
 
@@ -218,8 +228,8 @@ namespace UIDemo
         public void OnLogout(QuickFix.SessionID sessionID)
         {
             Trace.WriteLine(String.Format("==OnLogout: {0}==", this.ActiveSessionID.ToString()));
-            if (LogonEvent != null)
-                LogonEvent();
+            if (LogoutEvent != null)
+                LogoutEvent();
         }
 
         public void ToAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
@@ -243,7 +253,11 @@ namespace UIDemo
 
         public void OnMessage(QuickFix.FIX40.ExecutionReport msg, QuickFix.SessionID s) { }
         public void OnMessage(QuickFix.FIX41.ExecutionReport msg, QuickFix.SessionID s) { }
-        public void OnMessage(QuickFix.FIX42.ExecutionReport msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX42.ExecutionReport msg, QuickFix.SessionID s) 
+        {
+            if (Fix42ExecReportEvent != null)
+                Fix42ExecReportEvent(msg);
+        }
         public void OnMessage(QuickFix.FIX43.ExecutionReport msg, QuickFix.SessionID s) { }
         public void OnMessage(QuickFix.FIX44.ExecutionReport msg, QuickFix.SessionID s) { }
         public void OnMessage(QuickFix.FIX50.ExecutionReport msg, QuickFix.SessionID s) { }
