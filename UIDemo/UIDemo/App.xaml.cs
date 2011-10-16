@@ -36,6 +36,8 @@ namespace UIDemo
             MainWindow mainWindow = new MainWindow();
             mainWindow.DataContext = new MainWindowViewModel();
 
+            mainWindow.ExecutionView.DataContext = new ExecutionViewModel(_qfapp);
+
             // TODO - pull these views out of MainWindow into their own xml files
             mainWindow.ConnectionView.DataContext = new ConnectionViewModel(_qfapp);
             mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
@@ -50,7 +52,7 @@ namespace UIDemo
 
             _qfapp.Stop();
 
-            this.Shutdown(0);
+//            this.Shutdown(0);
         }
     }
 }

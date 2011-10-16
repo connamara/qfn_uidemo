@@ -1,0 +1,27 @@
+﻿<Grid x:Class="UIDemo.View.ExecutionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    >
+    
+    <Grid.RowDefinitions>
+        <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <Border BorderBrush="Black" BorderThickness="1">
+        <ListView IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=Executions, Mode=TwoWay}">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="ExecID" DisplayMemberBinding="{Binding Path=ExecID}"/>
+                        <GridViewColumn Header="OrderID" DisplayMemberBinding="{Binding Path=OrderID}"/>
+                        <GridViewColumn Header="TransType" DisplayMemberBinding="{Binding Path=ExecTransType}"/>
+                        <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Path=ExecType}"/>
+                        <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Path=Symbol}"/>
+                        <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Border>
+
+</Grid>

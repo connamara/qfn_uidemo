@@ -6,6 +6,7 @@ using UIDemo.Model;
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using UIDemo.Util;
 
 namespace UIDemo.ViewModel
 {
@@ -72,23 +73,15 @@ namespace UIDemo.ViewModel
                     {
                         var n42 = m as QuickFix.FIX42.NewOrderSingle;
 
-                        string ordertype = "";
-                        switch (n42.OrdType.Obj)
-                        {
-                            case '1': ordertype = "Market"; break;
-                            case '2': ordertype = "Limit"; break;
-                            default: ordertype = "unknown"; break;
-                        }
-
                         decimal price = -1;
-                        if (n42.OrdType.Obj != '1')
+                        if (n42.OrdType.Obj != QuickFix.Fields.OrdType.MARKET)
                             price = n42.Price.Obj;
 
                         OrderRecord r = new OrderRecord(
                             n42.ClOrdID.Obj,
                             n42.Symbol.Obj,
                             isBuy,
-                            ordertype,
+                            FixEnumTranslator.Translate(n42.OrdType),
                             price,
                             "New");
 
@@ -109,22 +102,9 @@ namespace UIDemo.ViewModel
             try
             {
                 string ordId = msg.ClOrdID.Obj;
-                decimal price = msg.LastPx.Obj;
+                string status = FixEnumTranslator.Translate(msg.OrdStatus);
 
-                string status = "";
-                switch (msg.OrdStatus.Obj)
-                {
-                    case '0': status = "New"; break;
-                    case '1': status = "PartiallyFilled"; break;
-                    case '2': status = "Filled"; break;
-                    case '4': status = "Canceled"; break;
-                    case '5': status = "Replaced"; break;
-                    case '8': status = "Rejected"; break;
-                    default: status = "unknown"; break;
-                }
-
-                Trace.Write("OVM: Handling ExecutionReport: " + ordId + " / " + status);
-
+                Trace.WriteLine("OVM: Handling ExecutionReport: " + ordId + " / " + status);
 
                 lock (_ordersLock)
                 {
@@ -133,7 +113,7 @@ namespace UIDemo.ViewModel
                         if (r.ClOrdID == ordId)
                         {
                             r.Status = status;
-                            r.Price = price;
+                            r.Price = msg.LastPx.Obj;
                         }
                     }
                 }
