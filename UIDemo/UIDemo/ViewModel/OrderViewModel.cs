@@ -28,6 +28,8 @@ namespace UIDemo.ViewModel
             // command definitions
             SendBuyCommand = new RelayCommand(SendBuy);
             SendSellCommand = new RelayCommand(SendSell);
+
+            _qfapp.Fix42ExecReportEvent += new Action<QuickFix.FIX42.ExecutionReport>(HandleExecutionReport);
         }
 
         private string _symbol = "IBM";
@@ -78,7 +80,7 @@ namespace UIDemo.ViewModel
                             default: ordertype = "unknown"; break;
                         }
 
-                        decimal price = 0;
+                        decimal price = -1;
                         if (n42.OrdType.Obj != '1')
                             price = n42.Price.Obj;
 
@@ -104,28 +106,41 @@ namespace UIDemo.ViewModel
 
         public void HandleExecutionReport(QuickFix.FIX42.ExecutionReport msg)
         {
-            string ordId = msg.ClOrdID.Obj;
-            string status = "";
-            switch (msg.OrdStatus.Obj)
+            try
             {
-                case '0': status = "New"; break;
-                case '1': status = "PartiallyFilled"; break;
-                case '2': status = "Filled"; break;
-                case '4': status = "Canceled"; break;
-                case '5': status = "Replaced"; break;
-                case '8': status = "Rejected"; break;
-                default: status = "unknown"; break;
-            }
+                string ordId = msg.ClOrdID.Obj;
+                decimal price = msg.LastPx.Obj;
 
-            lock (_ordersLock)
-            {
-                foreach (OrderRecord r in Orders)
+                string status = "";
+                switch (msg.OrdStatus.Obj)
                 {
-                    if (r.ClOrdID == ordId)
+                    case '0': status = "New"; break;
+                    case '1': status = "PartiallyFilled"; break;
+                    case '2': status = "Filled"; break;
+                    case '4': status = "Canceled"; break;
+                    case '5': status = "Replaced"; break;
+                    case '8': status = "Rejected"; break;
+                    default: status = "unknown"; break;
+                }
+
+                Trace.Write("OVM: Handling ExecutionReport: " + ordId + " / " + status);
+
+
+                lock (_ordersLock)
+                {
+                    foreach (OrderRecord r in Orders)
                     {
-                        r.Status = status;
+                        if (r.ClOrdID == ordId)
+                        {
+                            r.Status = status;
+                            r.Price = price;
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
             }
         }
     }

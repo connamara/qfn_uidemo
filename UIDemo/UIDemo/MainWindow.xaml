@@ -151,6 +151,7 @@
                                         <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
                                         <GridViewColumn Header="OrdType" DisplayMemberBinding="{Binding Path=OrdType}"/>
                                         <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Path=Price}"/>
+                                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                                     </GridView.Columns>
                                 </GridView>
                             </ListView.View>
