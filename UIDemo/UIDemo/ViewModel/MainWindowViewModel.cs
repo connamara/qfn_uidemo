@@ -11,7 +11,6 @@ namespace UIDemo.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
-            : base()
         {
             this.DisplayName = "QuickFIX/N UIDemo App";
         }

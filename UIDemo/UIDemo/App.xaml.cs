@@ -48,11 +48,16 @@ namespace UIDemo
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            Trace.WriteLine("Application exit.");
+            try
+            {
+                Trace.WriteLine("Application exit.");
 
-            _qfapp.Stop();
-
-//            this.Shutdown(0);
+                _qfapp.Stop();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
         }
     }
 }

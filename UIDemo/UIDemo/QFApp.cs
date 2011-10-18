@@ -80,73 +80,68 @@ namespace UIDemo
                 //case QuickFix.FixValues.BeginString.FIX40:
 
                 case QuickFix.FixValues.BeginString.FIX41:
-                    QuickFix.FIX41.News news41 = new QuickFix.FIX41.News(headline);
-                    if (lines.Count > 0)
                     {
+                        QuickFix.FIX41.News news41 = new QuickFix.FIX41.News(headline);
                         QuickFix.FIX41.News.LinesOfTextGroup group = new QuickFix.FIX41.News.LinesOfTextGroup();
                         foreach (string s in lines)
                         {
                             group.Text = new QuickFix.Fields.Text(s);
                             news41.AddGroup(group);
                         }
+                        m = news41;
                     }
-                    m = news41;
                     break;
 
                 case QuickFix.FixValues.BeginString.FIX42:
-                    QuickFix.FIX42.News news42 = new QuickFix.FIX42.News(headline);
-                    if (lines.Count > 0)
                     {
+                        QuickFix.FIX42.News news42 = new QuickFix.FIX42.News(headline);
                         QuickFix.FIX42.News.LinesOfTextGroup group = new QuickFix.FIX42.News.LinesOfTextGroup();
                         foreach (string s in lines)
                         {
                             group.Text = new QuickFix.Fields.Text(s);
                             news42.AddGroup(group);
                         }
+                        m = news42;
                     }
-                    m = news42;
                     break;
 
                 case QuickFix.FixValues.BeginString.FIX43:
-                    QuickFix.FIX43.News news43 = new QuickFix.FIX43.News(headline);
-                    if (lines.Count > 0)
                     {
+                        QuickFix.FIX43.News news43 = new QuickFix.FIX43.News(headline);
                         QuickFix.FIX43.News.LinesOfTextGroup group = new QuickFix.FIX43.News.LinesOfTextGroup();
                         foreach (string s in lines)
                         {
                             group.Text = new QuickFix.Fields.Text(s);
                             news43.AddGroup(group);
                         }
+                        m = news43;
                     }
-                    m = news43;
                     break;
 
                 case QuickFix.FixValues.BeginString.FIX44:
-                    QuickFix.FIX44.News news44 = new QuickFix.FIX44.News(headline);
-                    if (lines.Count > 0)
                     {
+                        QuickFix.FIX44.News news44 = new QuickFix.FIX44.News(headline);
                         QuickFix.FIX44.News.LinesOfTextGroup group = new QuickFix.FIX44.News.LinesOfTextGroup();
                         foreach (string s in lines)
                         {
                             group.Text = new QuickFix.Fields.Text(s);
                             news44.AddGroup(group);
                         }
+                        m = news44;
                     }
-                    m = news44;
                     break;
 
                 case QuickFix.FixValues.BeginString.FIX50:
-                    QuickFix.FIX50.News news50 = new QuickFix.FIX50.News(headline);
-                    if (lines.Count > 0)
                     {
+                        QuickFix.FIX50.News news50 = new QuickFix.FIX50.News(headline);
                         QuickFix.FIX50.News.NoLinesOfTextGroup group = new QuickFix.FIX50.News.NoLinesOfTextGroup();
                         foreach (string s in lines)
                         {
                             group.Text = new QuickFix.Fields.Text(s);
                             news50.AddGroup(group);
                         }
+                        m = news50;
                     }
-                    m = news50;
                     break;
 
                 default:
