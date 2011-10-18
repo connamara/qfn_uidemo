@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using QuickFix;
+using UIDemo.View;
 using UIDemo.ViewModel;
 
 namespace UIDemo

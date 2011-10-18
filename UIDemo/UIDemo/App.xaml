@@ -6,6 +6,10 @@
     DispatcherUnhandledException="Application_DispatcherUnhandledException"
 >
     <Application.Resources>
-         
+        <Style x:Key="FeatureTitle" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
     </Application.Resources>
 </Application>

@@ -4,10 +4,12 @@
     >
     
     <Grid.RowDefinitions>
-        <RowDefinition/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <Border BorderBrush="Black" BorderThickness="1">
+    <Label Style="{StaticResource FeatureTitle}" Content="View All Executions"/>
+    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
         <ListView IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=Executions, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
