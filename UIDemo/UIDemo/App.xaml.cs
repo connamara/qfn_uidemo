@@ -8,6 +8,7 @@ using System.Windows;
 using QuickFix;
 using UIDemo.View;
 using UIDemo.ViewModel;
+using System.Threading;
 
 namespace UIDemo
 {
@@ -52,7 +53,6 @@ namespace UIDemo
             try
             {
                 Trace.WriteLine("Application exit.");
-
                 _qfapp.Stop();
             }
             catch (Exception ex)
