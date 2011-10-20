@@ -16,23 +16,16 @@ namespace UnitTests
         [Test]
         public void HeadlineOnly()
         {
-            QFApp app = null;
-            SessionThatTracksOutbound session = null;
-            MockInitiator init = null;
-            TestTool.SetupAppAndSession(out app, out session, out init);
+            UnitTestContext context = new UnitTestContext();
+            context.Login();
 
-            // login
-            app.OnLogon(session.SessionID);
-            init.IsLoggedOnValue = true; //kludge
-
-            NewsSenderViewModel vm = new NewsSenderViewModel(app);
-
+            NewsSenderViewModel vm = new NewsSenderViewModel(context.App);
             vm.Headline = "AAAAA";
             vm.SendNewsCommand.Execute(null);
 
-            Assert.AreEqual(1, session.MsgLookup[QuickFix.FIX42.News.MsgType].Count);
+            Assert.AreEqual(1, context.Session.MsgLookup[QuickFix.FIX42.News.MsgType].Count);
 
-            string msg = session.MsgLookup[QuickFix.FIX42.News.MsgType].First().ToString();
+            string msg = context.Session.MsgLookup[QuickFix.FIX42.News.MsgType].First().ToString();
 
             string nul = QuickFix.Message.SOH;
             StringAssert.Contains(nul + "33=0" + nul, msg);
