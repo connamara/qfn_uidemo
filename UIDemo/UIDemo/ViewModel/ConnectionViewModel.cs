@@ -22,7 +22,7 @@ namespace UIDemo.ViewModel
             _qfapp = app;
 
             // initialize SessionString
-            HashSet<QuickFix.SessionID> sidset = _qfapp.SessionSettings.GetSessions();
+            HashSet<QuickFix.SessionID> sidset = _qfapp.MySessionSettings.GetSessions();
             Trace.WriteLine("Sessions count in config: " + sidset.Count);
             foreach (QuickFix.SessionID sid in sidset)
                 Trace.WriteLine("-> " + sid.ToString());

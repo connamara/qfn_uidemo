@@ -74,7 +74,7 @@ namespace UIDemo.ViewModel
         }
 
         // commands
-        private void SendNews(object obj)
+        private void SendNews(object ignored)
         {
             Trace.WriteLine(String.Format("Send news: Head=[{0}] Line1=[{1}]", this.Headline, this.Line1Text));
             string h = this.Headline;

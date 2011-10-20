@@ -10,40 +10,49 @@ namespace UIDemo
     public class QFApp : QuickFix.MessageCracker, QuickFix.Application
     {
         public QuickFix.SessionID ActiveSessionID { get; set; }
-        public QuickFix.SessionSettings SessionSettings { get; set; }
+        public QuickFix.SessionSettings MySessionSettings { get; set; }
+
+        private QuickFix.IInitiator _initiator = null;
+        public QuickFix.IInitiator Initiator
+        {
+            set
+            {
+                if (_initiator != null)
+                    throw new Exception("You already set the initiator");
+                _initiator = value;
+            }
+            get
+            {
+                if (_initiator == null)
+                    throw new Exception("You didn't provide an initiator");
+                return _initiator;
+            }
+        }
 
         public event Action LogonEvent;
         public event Action LogoutEvent;
 
         public event Action<QuickFix.FIX42.ExecutionReport> Fix42ExecReportEvent;
 
-        private QuickFix.Initiator _initiator;
 
-        public QFApp()
+
+        public QFApp(QuickFix.SessionSettings settings)
         {
             ActiveSessionID = null;
-            SessionSettings = new QuickFix.SessionSettings("quickfix.cfg");
+            MySessionSettings = settings;
         }
 
         public void Start()
         {
             Trace.WriteLine("QFApp::Start() called");
 
-            if (_initiator == null)
-            {
-                Trace.WriteLine("Creating new initiator");
-                QuickFix.MessageStoreFactory storeFactory = new QuickFix.FileStoreFactory(SessionSettings);
-                QuickFix.LogFactory logFactory = new QuickFix.ScreenLogFactory(SessionSettings);
-                _initiator = new QuickFix.Transport.SocketInitiator(this, storeFactory, SessionSettings, logFactory);
-            }
-            _initiator.Start();
+            Initiator.Start();
         }
 
         public void Stop()
         {
             Trace.WriteLine("QFApp::Stop() called");
-            if (_initiator != null)
-                _initiator.Stop();
+            Initiator.Stop();
         }
 
         private void Send(QuickFix.Message m)
@@ -54,7 +63,7 @@ namespace UIDemo
 
         private bool CanSendMessage()
         {
-            if (_initiator.IsLoggedOn() == false)
+            if (Initiator.IsLoggedOn() == false)
             {
                 Trace.WriteLine("Can't send a message.  We're not logged on.");
                 return false;
@@ -148,6 +157,12 @@ namespace UIDemo
                     Trace.WriteLine("FIX version unsupported for type 'News': " + ActiveSessionID.BeginString);
                     return;
             }//end switch on BeginString
+
+            if (lines.Count == 0)
+            {
+                QuickFix.Fields.LinesOfText noLines = new QuickFix.Fields.LinesOfText(0);
+                m.SetField(noLines, true);
+            }
 
             this.Send(m);
         }

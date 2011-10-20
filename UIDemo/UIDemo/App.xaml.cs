@@ -33,8 +33,18 @@ namespace UIDemo
         {
             Trace.WriteLine("Application started.");
 
-            _qfapp = new QFApp();
+            // FIX application setup
+            QuickFix.SessionSettings settings = new QuickFix.SessionSettings("quickfix.cfg");
+            QuickFix.MessageStoreFactory storeFactory = new QuickFix.FileStoreFactory(settings);
+            QuickFix.LogFactory logFactory = new QuickFix.ScreenLogFactory(settings);
 
+            _qfapp = new QFApp(settings);
+
+            QuickFix.IInitiator initiator = new QuickFix.Transport.SocketInitiator(_qfapp, storeFactory, settings, logFactory);
+            _qfapp.Initiator = initiator;
+
+
+            // Window creation and context assignment
             MainWindow mainWindow = new MainWindow();
             mainWindow.DataContext = new MainWindowViewModel();
 

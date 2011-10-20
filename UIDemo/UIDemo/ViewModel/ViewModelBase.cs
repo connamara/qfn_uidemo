@@ -2,9 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 
-// Swiped from Josh Smith's excellent MVVM article.
-// http://msdn.microsoft.com/en-us/magazine/dd419663.aspx
-
 namespace UIDemo.ViewModel
 {
     /// <summary>
