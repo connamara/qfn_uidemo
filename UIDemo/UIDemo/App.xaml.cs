@@ -55,6 +55,7 @@ namespace UIDemo
             mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
             mainWindow.NewsSenderView.DataContext = new NewsSenderViewModel(_qfapp);
 
+            // Set the main UI dispatcher
             SmartDispatcher.SetDispatcher(mainWindow.Dispatcher);
 
             mainWindow.Show();
