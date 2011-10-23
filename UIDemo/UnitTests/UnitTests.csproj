@@ -54,8 +54,12 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionTests.cs" />
     <Compile Include="NewsSenderTests.cs" />
     <Compile Include="DummyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

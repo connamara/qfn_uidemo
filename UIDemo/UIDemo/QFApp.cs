@@ -45,7 +45,6 @@ namespace UIDemo
         public void Start()
         {
             Trace.WriteLine("QFApp::Start() called");
-
             Initiator.Start();
         }
 

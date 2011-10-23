@@ -43,7 +43,8 @@ namespace UIDemo.ViewModel
                     msg.Symbol.Obj,
                     FixEnumTranslator.Translate(msg.Side));
 
-                System.Windows.Application.Current.Dispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
+                SmartDispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
+//                System.Windows.Application.Current.Dispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
             }
             catch (Exception e)
             {

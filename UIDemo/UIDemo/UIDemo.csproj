@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="QFApp.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="SmartDispatcher.cs" />
     <Compile Include="Util\FixEnumTranslator.cs" />
     <Compile Include="ViewModel\ConnectionViewModel.cs" />
     <Compile Include="ViewModel\ExecutionViewModel.cs" />
