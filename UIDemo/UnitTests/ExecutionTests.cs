@@ -13,9 +13,6 @@ namespace UnitTests
     [TestFixture]
     public class ExecutionTests
     {
-        readonly string nul = QuickFix.Message.SOH;
-
-
         private QuickFix.FIX42.ExecutionReport CreateExReport(
             string orderid,
             string execid,

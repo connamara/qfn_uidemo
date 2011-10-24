@@ -44,7 +44,6 @@ namespace UIDemo.ViewModel
                     FixEnumTranslator.Translate(msg.Side));
 
                 SmartDispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
-//                System.Windows.Application.Current.Dispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
             }
             catch (Exception e)
             {
