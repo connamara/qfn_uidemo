@@ -13,6 +13,32 @@ namespace UnitTests
     [TestFixture]
     public class OrderTests
     {
+        private QuickFix.FIX42.ExecutionReport CreateExReport(
+            string orderid,
+            string execid,
+            char exectranstype,
+            char exectype,
+            char ordstatus,
+            string symbol,
+            char side,
+            decimal leavesqty,
+            decimal cumqty,
+            decimal avgpx)
+        {
+            return new QuickFix.FIX42.ExecutionReport(
+                new QuickFix.Fields.OrderID(orderid),
+                new QuickFix.Fields.ExecID(execid),
+                new QuickFix.Fields.ExecTransType(exectranstype),
+                new QuickFix.Fields.ExecType(exectype),
+                new QuickFix.Fields.OrdStatus(ordstatus),
+                new QuickFix.Fields.Symbol(symbol),
+                new QuickFix.Fields.Side(side),
+                new QuickFix.Fields.LeavesQty(leavesqty),
+                new QuickFix.Fields.CumQty(cumqty),
+                new QuickFix.Fields.AvgPx(avgpx));
+        }
+
+
         [Test]
         public void SubmitOneBuyOrderWithDefaultValues()
         {
@@ -39,5 +65,70 @@ namespace UnitTests
             Assert.AreEqual("Market", o.OrdType);
             Assert.AreEqual("Buy", o.Side);
         }
+
+        [Test]
+        public void SellOrderWithChanges()
+        {
+            UnitTestContext context = new UnitTestContext();
+            context.Login();
+
+            OrderViewModel vm = new OrderViewModel(context.App);
+
+            vm.Symbol = "pants";
+            vm.OrderQty = 999;
+            vm.SendSellCommand.Execute(null);
+
+            // messaging of sent order
+            Assert.AreEqual(1, context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType].Count);
+            QuickFix.FIX42.NewOrderSingle msg = context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType][0] as QuickFix.FIX42.NewOrderSingle;
+            Assert.AreEqual("pants", msg.Symbol.Obj);
+            Assert.AreEqual(999, msg.OrderQty.Obj);
+            Assert.AreEqual(QuickFix.Fields.Side.SELL, msg.Side.Obj);
+
+            // what's in the grid
+            Assert.AreEqual(1, vm.Orders.Count);
+            OrderRecord o = vm.Orders.First();
+            Assert.AreEqual("pants", o.Symbol);
+            Assert.AreEqual(-1, o.Price);
+            Assert.AreEqual("Market", o.OrdType);
+            Assert.AreEqual("Sell", o.Side);
+        }
+
+        [Test]
+        public void OrderUpdate()
+        {
+            UnitTestContext context = new UnitTestContext();
+            context.Login();
+
+            OrderViewModel vm = new OrderViewModel(context.App);
+
+            vm.SendBuyCommand.Execute(null);
+
+            // messaging of sent order
+            Assert.AreEqual(1, context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType].Count);
+            QuickFix.FIX42.NewOrderSingle msg = context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType][0] as QuickFix.FIX42.NewOrderSingle;
+
+            // what's in the grid
+            Assert.AreEqual(1, vm.Orders.Count);
+            OrderRecord o = vm.Orders.First();
+            Assert.AreEqual("IBM", o.Symbol);
+            Assert.AreEqual(-1, o.Price);
+            Assert.AreEqual("Market", o.OrdType);
+            Assert.AreEqual("Buy", o.Side);
+            Assert.AreEqual("New", o.Status);
+
+            QuickFix.FIX42.ExecutionReport r = CreateExReport(
+                o.ClOrdID, "foo", QuickFix.Fields.ExecTransType.NEW, QuickFix.Fields.ExecType.FILL,
+                QuickFix.Fields.OrdStatus.FILLED, "IBM", QuickFix.Fields.Side.BUY, 0, 0, 0);
+            r.LastPx = new QuickFix.Fields.LastPx(999m);
+            r.ClOrdID = new QuickFix.Fields.ClOrdID(msg.ClOrdID.Obj);
+            context.App.FromApp(r, context.Session.SessionID);
+
+            // check that it got changed
+            Assert.AreEqual(1, vm.Orders.Count);
+            Assert.AreEqual(999, o.Price);
+            Assert.AreEqual("Filled", o.Status);
+        }
+
     }
 }

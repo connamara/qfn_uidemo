@@ -114,9 +114,12 @@ namespace UIDemo.ViewModel
                         {
                             r.Status = status;
                             r.Price = msg.LastPx.Obj;
+                            return;
                         }
                     }
                 }
+
+                Trace.WriteLine("OVM: No order corresponds to ClOrdID '" + ordId + "'");
             }
             catch (Exception e)
             {
