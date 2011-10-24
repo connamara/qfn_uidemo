@@ -75,6 +75,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\NewsSenderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\OrderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +121,9 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\ExecutionView.xaml.cs">
       <DependentUpon>ExecutionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewsSenderView.xaml.cs">
+      <DependentUpon>NewsSenderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\OrderView.xaml.cs">
       <DependentUpon>OrderView.xaml</DependentUpon>

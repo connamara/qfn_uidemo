@@ -22,7 +22,5 @@ namespace UIDemo
             else
                 _dispatcher.Invoke(action, arg);
         }
-        //                System.Windows.Application.Current.Dispatcher.Invoke(new Action<ExecutionRecord>(AddExecution), exRec);
-
     }
 }

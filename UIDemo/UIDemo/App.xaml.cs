@@ -49,8 +49,6 @@ namespace UIDemo
             mainWindow.DataContext = new MainWindowViewModel();
 
             mainWindow.ExecutionView.DataContext = new ExecutionViewModel(_qfapp);
-
-            // TODO - pull these views out of MainWindow into their own xml files
             mainWindow.ConnectionView.DataContext = new ConnectionViewModel(_qfapp);
             mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
             mainWindow.NewsSenderView.DataContext = new NewsSenderViewModel(_qfapp);

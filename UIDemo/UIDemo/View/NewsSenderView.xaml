@@ -1,0 +1,50 @@
+﻿<StackPanel x:Class="UIDemo.View.NewsSenderView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Orientation="Vertical"
+>
+    
+    <Label Style="{StaticResource FeatureTitle}" Content="Send a News Message"/>
+
+    <Grid Margin="0,0,0,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Specify a Headline:" FontWeight="Bold"/>
+        <TextBox Grid.Column="1" Text="{Binding Path=Headline, Mode=TwoWay}"/>
+    </Grid>
+
+    <Label Content="Specify lines (if desired):" FontWeight="Bold"/>
+
+    <Border BorderThickness="1" BorderBrush="Silver" Margin="3" Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=IsLine1Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="1" Content="Line 1:"/>
+            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Line1Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine1Enabled}"/>
+
+            <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Path=IsLine2Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Line 2:"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=Line2Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine2Enabled}"/>
+
+            <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding Path=IsLine3Enabled, Mode=TwoWay}" VerticalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="Line 3:"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=Line3Text, Mode=TwoWay}" IsEnabled="{Binding Path=IsLine3Enabled}"/>
+        </Grid>
+    </Border>
+
+    <Button Content="Send The Message" Command="{Binding Path=SendNewsCommand}"
+                            MinWidth="10" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+
+</StackPanel>

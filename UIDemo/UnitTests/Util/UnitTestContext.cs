@@ -16,7 +16,7 @@ namespace UnitTests.Util
         {
             QuickFix.Dictionary config = CreateConfig();
             QuickFix.SessionID sessionID = new QuickFix.SessionID("FIX.4.2", "SENDER", "TARGET");
-            QuickFix.SessionSettings settings = new QuickFix.SessionSettings(); //CreateSettings(sessionID);
+            QuickFix.SessionSettings settings = new QuickFix.SessionSettings();
             settings.Set(sessionID, config);
 
             App = new QFApp(settings);
@@ -50,6 +50,12 @@ namespace UnitTests.Util
         {
             App.OnLogon(Session.SessionID);
             Initiator.IsLoggedOnValue = true;
+        }
+
+        public void Logout()
+        {
+            App.OnLogout(Session.SessionID);
+            Initiator.IsLoggedOnValue = false;
         }
     }
 }
