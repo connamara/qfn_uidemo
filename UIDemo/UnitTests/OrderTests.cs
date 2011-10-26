@@ -75,7 +75,7 @@ namespace UnitTests
             OrderViewModel vm = new OrderViewModel(context.App);
 
             vm.Symbol = "pants";
-            vm.OrderQty = 999;
+            vm.OrderQtyString = "999";
             vm.SendSellCommand.Execute(null);
 
             // messaging of sent order
@@ -129,6 +129,5 @@ namespace UnitTests
             Assert.AreEqual(999, o.Price);
             Assert.AreEqual("Filled", o.Status);
         }
-
     }
 }

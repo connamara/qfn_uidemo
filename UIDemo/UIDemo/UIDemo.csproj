@@ -93,6 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ValidationRules.cs" />
     <Compile Include="Model\ExecutionRecord.cs" />
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Model\OrderRecord.cs" />
