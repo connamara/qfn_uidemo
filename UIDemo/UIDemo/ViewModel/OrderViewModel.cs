@@ -7,11 +7,23 @@ using System.Windows.Input;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using UIDemo.Util;
+using UIDemo.Enums;
 
 namespace UIDemo.ViewModel
 {
     public class OrderViewModel : ViewModelBase
     {
+        #region Static Initialization
+        static private readonly List<OrderType> _ORDERTYPE_CHOICES = new List<OrderType>();
+        static OrderViewModel() // (static constructor)
+        {
+            _ORDERTYPE_CHOICES.Add(OrderType.Market);
+            _ORDERTYPE_CHOICES.Add(OrderType.Limit);
+        }
+        #endregion
+
+
+        // instance stuff
         private QFApp _qfapp = null;
 
         private Object _ordersLock = new Object();
@@ -31,6 +43,21 @@ namespace UIDemo.ViewModel
             SendSellCommand = new RelayCommand(SendSell);
 
             _qfapp.Fix42ExecReportEvent += new Action<QuickFix.FIX42.ExecutionReport>(HandleExecutionReport);
+        }
+
+        public List<OrderType> OrderTypeChoices { get { return _ORDERTYPE_CHOICES; } }
+        private OrderType _selectedOrderType = OrderType.Market;
+        public OrderType SelectedOrderType
+        {
+            get { return _selectedOrderType; }
+            set
+            {
+                if (_selectedOrderType != value)
+                {
+                    _selectedOrderType = value;
+                    base.OnPropertyChanged("SelectedOrderType");
+                }
+            }
         }
 
         private string _symbol = "IBM";
@@ -66,8 +93,8 @@ namespace UIDemo.ViewModel
 
         private void SendOrder(bool isBuy)
         {
-            Trace.WriteLine(String.Format("Send NewOrder: Side={0} Symbol=[{1}] Qty=[{2}]",
-                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString));
+            Trace.WriteLine(String.Format("Send New Order: Side={0} Symbol=[{1}] Qty=[{2}] Type=[{3}]",
+                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.SelectedOrderType.ToString()));
 
             try
             {

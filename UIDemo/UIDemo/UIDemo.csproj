@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ValidationRules.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Model\ExecutionRecord.cs" />
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Model\OrderRecord.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="SmartDispatcher.cs" />
     <Compile Include="Util\FixEnumTranslator.cs" />
+    <Compile Include="Util\MessageCreator42.cs" />
     <Compile Include="ViewModel\ConnectionViewModel.cs" />
     <Compile Include="ViewModel\ExecutionViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

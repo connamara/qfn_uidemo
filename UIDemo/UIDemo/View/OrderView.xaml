@@ -46,17 +46,20 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <!--
-                <controls:SimpleNumericSpinner/>
-                -->
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="OrdType:" Style="{StaticResource fieldLabel}"/>
-                <Label Content="{Binding Path=OrdType}"/>
+                <ComboBox ToolTip="Order type"
+                          ItemsSource="{Binding Path=OrderTypeChoices}"
+                          SelectedValue="{Binding Path=SelectedOrderType, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
 
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+            
+        </StackPanel>
+        
         <Grid Grid.Row="0" Grid.Column="2" IsEnabled="{Binding Path=IsActionsEnabled}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
