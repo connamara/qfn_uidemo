@@ -52,7 +52,7 @@
                 <Label Content="OrdType:" Style="{StaticResource fieldLabel}"/>
                 <ComboBox ToolTip="Order type"
                           ItemsSource="{Binding Path=OrderTypeChoices}"
-                          SelectedValue="{Binding Path=SelectedOrderType, Mode=TwoWay}"/>
+                          SelectedValue="{Binding Path=OrderType, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
 

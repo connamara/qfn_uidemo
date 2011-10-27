@@ -5,6 +5,7 @@ using System.Text;
 using UIDemo.Model;
 using System.Diagnostics;
 using System.Windows.Input;
+using UIDemo.Util;
 
 namespace UIDemo.ViewModel
 {
@@ -76,17 +77,26 @@ namespace UIDemo.ViewModel
         // commands
         private void SendNews(object ignored)
         {
-            Trace.WriteLine(String.Format("Send news: Head=[{0}] Line1=[{1}]", this.Headline, this.Line1Text));
-            string h = this.Headline;
-            IList<string> lines = new List<string>();
-            if (this.IsLine1Enabled)
-                lines.Add(this.Line1Text);
-            if (this.IsLine2Enabled)
-                lines.Add(this.Line2Text);
-            if(this.IsLine3Enabled)
-                lines.Add(this.Line3Text);
+            try
+            {
+                Trace.WriteLine(String.Format("Send news: Head=[{0}] Line1=[{1}]", this.Headline, this.Line1Text));
+                string h = this.Headline;
+                IList<string> lines = new List<string>();
+                if (this.IsLine1Enabled)
+                    lines.Add(this.Line1Text);
+                if (this.IsLine2Enabled)
+                    lines.Add(this.Line2Text);
+                if (this.IsLine3Enabled)
+                    lines.Add(this.Line3Text);
 
-            _qfapp.SendNewsMessage(h, lines);
+                QuickFix.FIX42.News news = MessageCreator42.News(h, lines);
+
+                _qfapp.Send(news);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Failed to send news message.\n" + e.ToString());
+            }
         }
     }
 }

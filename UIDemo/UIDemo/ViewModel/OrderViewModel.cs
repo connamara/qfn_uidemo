@@ -46,16 +46,16 @@ namespace UIDemo.ViewModel
         }
 
         public List<OrderType> OrderTypeChoices { get { return _ORDERTYPE_CHOICES; } }
-        private OrderType _selectedOrderType = OrderType.Market;
-        public OrderType SelectedOrderType
+        private OrderType _orderType = OrderType.Market;
+        public OrderType OrderType
         {
-            get { return _selectedOrderType; }
+            get { return _orderType; }
             set
             {
-                if (_selectedOrderType != value)
+                if (_orderType != value)
                 {
-                    _selectedOrderType = value;
-                    base.OnPropertyChanged("SelectedOrderType");
+                    _orderType = value;
+                    base.OnPropertyChanged("OrderType");
                 }
             }
         }
@@ -74,13 +74,6 @@ namespace UIDemo.ViewModel
             set { _orderQtyString = value; base.OnPropertyChanged("OrderQtyString"); }
         }
 
-        private string _ordType = "Market";
-        public string OrdType
-        {
-            get { return _ordType; }
-            set { _ordType = value; base.OnPropertyChanged("OrdType"); }
-        }
-
         private bool _isActionsEnabled = true;
         public bool IsActionsEnabled
         {
@@ -93,43 +86,56 @@ namespace UIDemo.ViewModel
 
         private void SendOrder(bool isBuy)
         {
-            Trace.WriteLine(String.Format("Send New Order: Side={0} Symbol=[{1}] Qty=[{2}] Type=[{3}]",
-                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.SelectedOrderType.ToString()));
-
             try
             {
-                QuickFix.Message m = null;
-                lock (_ordersLock)
+                switch (this.OrderType)
                 {
-                    m = _qfapp.SendNewOrder(isBuy, this.Symbol, Int32.Parse(this.OrderQtyString));
-
-                    if (m is QuickFix.FIX42.NewOrderSingle)
-                    {
-                        var n42 = m as QuickFix.FIX42.NewOrderSingle;
-
-                        decimal price = -1;
-                        if (n42.OrdType.Obj != QuickFix.Fields.OrdType.MARKET)
-                            price = n42.Price.Obj;
-
-                        OrderRecord r = new OrderRecord(
-                            n42.ClOrdID.Obj,
-                            n42.Symbol.Obj,
-                            isBuy,
-                            FixEnumTranslator.Translate(n42.OrdType),
-                            price,
-                            "New");
-
-                        Orders.Add(r);
-                    }
+                    case OrderType.Market:
+                        SendMarketOrder(isBuy);
+                        break;
+                    case OrderType.Limit:
+                        SendLimitOrder(isBuy);
+                        break;
                 }
             }
             catch (Exception e)
             {
-                string s = "Couldn't send order.\n" + e.ToString();
-                Trace.WriteLine(s);
+                Trace.WriteLine("Failed to send order\n" + e.ToString());
             }
         }
 
+        private void SendMarketOrder(bool isBuy)
+        {
+            Trace.WriteLine(String.Format("Send Market Order: Side={0} Symbol=[{1}] Qty=[{2}]",
+                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString));
+
+            QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.MarketOrder(isBuy, this.Symbol, Int32.Parse(this.OrderQtyString));
+
+            lock (_ordersLock)
+            {
+                decimal price = -1;
+                if (nos.OrdType.Obj != QuickFix.Fields.OrdType.MARKET)
+                    price = nos.Price.Obj;
+
+                OrderRecord r = new OrderRecord(
+                    nos.ClOrdID.Obj,
+                    nos.Symbol.Obj,
+                    isBuy,
+                    FixEnumTranslator.Translate(nos.OrdType),
+                    price,
+                    "New");
+
+                Orders.Add(r);
+            }
+
+            _qfapp.Send(nos);
+        }
+
+        private void SendLimitOrder(bool isBuy)
+        {
+            Trace.WriteLine(String.Format("Send Limit Order: Side={0} Symbol=[{1}] Qty=[{2}] LimitPrice=[{3}]",
+                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString));
+        }
 
         public void HandleExecutionReport(QuickFix.FIX42.ExecutionReport msg)
         {
