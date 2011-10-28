@@ -74,6 +74,7 @@ namespace UIDemo.ViewModel
             set { _orderQtyString = value; base.OnPropertyChanged("OrderQtyString"); }
         }
 
+        //TODO figure out if I can make this work somehow
         private bool _isActionsEnabled = true;
         public bool IsActionsEnabled
         {
@@ -81,6 +82,16 @@ namespace UIDemo.ViewModel
             set { _isActionsEnabled = value; base.OnPropertyChanged("IsActionsEnabled"); }
         }
 
+        private string _limitPriceString = "0";
+        public string LimitPriceString
+        {
+            get { return _limitPriceString; }
+            set { _limitPriceString = value; base.OnPropertyChanged("LimitPriceString"); }
+        }
+
+
+
+        // commands
         private void SendBuy(object obj) { SendOrder(true); }
         private void SendSell(object obj) { SendOrder(false); }
 
@@ -134,7 +145,7 @@ namespace UIDemo.ViewModel
         private void SendLimitOrder(bool isBuy)
         {
             Trace.WriteLine(String.Format("Send Limit Order: Side={0} Symbol=[{1}] Qty=[{2}] LimitPrice=[{3}]",
-                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString));
+                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.LimitPriceString));
         }
 
         public void HandleExecutionReport(QuickFix.FIX42.ExecutionReport msg)

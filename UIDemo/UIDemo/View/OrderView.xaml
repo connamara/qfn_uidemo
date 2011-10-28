@@ -3,8 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:UIDemo.Controls"
     xmlns:rules="clr-namespace:UIDemo.Controls.ValidationRules"
+    xmlns:enums="clr-namespace:UIDemo.Enums"
     >
 
+    <Grid.Resources>
+        <Style TargetType="Label" x:Key="fieldLabel">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="80"/>
+        </Style>
+    </Grid.Resources>
+    
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
@@ -14,23 +22,15 @@
     <Label Grid.Row="0" Style="{StaticResource FeatureTitle}" Content="Send/View Orders"/>
 
     <Grid Grid.Row="1">
+        
+        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
-            <StackPanel.Resources>
-                <Style TargetType="Label" x:Key="fieldLabel">
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="Width" Value="80"/>
-                </Style>
-            </StackPanel.Resources>
+        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Symbol:" Style="{StaticResource fieldLabel}"/>
                 <TextBox Text="{Binding Path=Symbol, Mode=TwoWay}" Width="80"/>
@@ -47,20 +47,60 @@
                     </TextBox.Text>
                 </TextBox>
             </StackPanel>
-
             <StackPanel Orientation="Horizontal">
                 <Label Content="OrdType:" Style="{StaticResource fieldLabel}"/>
-                <ComboBox ToolTip="Order type"
+                <ComboBox x:Name="comboOrdType" Width="80"
                           ItemsSource="{Binding Path=OrderTypeChoices}"
                           SelectedValue="{Binding Path=OrderType, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
-            
-        </StackPanel>
+        <Border Grid.Column="1" BorderThickness="1" BorderBrush="#BBBBBB">
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style x:Key="MarketFields" TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Market">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="LimitFields" TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Limit">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                
+                <Label FontWeight="Bold" Content="OrdType-specific fields:" HorizontalContentAlignment="Center"/>
+
+                <StackPanel Style="{StaticResource MarketFields}">
+                    <Label Content="(none)" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource LimitFields}" Orientation="Horizontal">
+                    <Label Content="Price:" Style="{StaticResource fieldLabel}"/>
+                    <TextBox Width="80">
+                        <TextBox.Text>
+                            <Binding Path="LimitPriceString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <rules:PositiveDecimalRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+
+            </StackPanel>
+        </Border>
+
         
-        <Grid Grid.Row="0" Grid.Column="2" IsEnabled="{Binding Path=IsActionsEnabled}">
+        <Grid Grid.Column="2" IsEnabled="{Binding Path=IsActionsEnabled}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -79,7 +119,7 @@
         </Grid>
     </Grid>
 
-    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
         <ListView IsSynchronizedWithCurrentItem="True"  ItemsSource="{Binding Path=Orders, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
