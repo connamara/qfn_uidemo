@@ -1,0 +1,37 @@
+﻿<Grid x:Class="UIDemo.View.InstructionsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
+
+    <FlowDocumentScrollViewer
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto"
+    >
+        <FlowDocument>
+            <Paragraph FontWeight="Bold" TextAlignment="Center">
+                QuickFIX/N UIDemo
+            </Paragraph>
+            
+            <Paragraph>
+                This is an example app demonstrating the use of QuickFIX/N in a UI application.
+            </Paragraph>
+            
+            <Paragraph>
+                UIDemo intended to be run against the
+                <Span FontStyle="Italic">Executor</Span> example program
+                that comes with the QuickFIX/N source distribution.  Simply start
+                <Span FontFamily="GlobalMonospace.CompositeFont">Executor.exe</Span>
+                with the
+                <Span FontFamily="GlobalMonospace.CompositeFont">executor.cfg</Span> that should be provided with it.
+            </Paragraph>
+
+            <Paragraph>
+                Once <Span FontStyle="Italic">Executor</Span> is running, you can click "Connect" above and UIDemo will connect to it.
+                Use the features in the other tabs to send orders and news messages to <Span FontStyle="Italic">Executor</Span>
+                and view the dummy execution reports that <Span FontStyle="Italic">Executor</Span> sends back.  You can also
+                use the "MessageView" tab to see the raw FIX messaging.
+            </Paragraph>
+            
+        </FlowDocument>
+    </FlowDocumentScrollViewer>
+</Grid>
