@@ -73,6 +73,10 @@
         </Border>
 
         <TabControl Grid.Row="1" Margin="5">
+            <TabItem Header="MessageView">
+                <v:MessageView x:Name="MessageView"/>
+            </TabItem>
+            
             <TabItem Header="Orders">
                 <v:OrderView x:Name="OrderView"/>
             </TabItem>

@@ -67,6 +67,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\MessageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +100,7 @@
     <Compile Include="Controls\ValidationRules.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Model\ExecutionRecord.cs" />
+    <Compile Include="Model\MessageRecord.cs" />
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Model\OrderRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -119,9 +124,13 @@
     <Compile Include="ViewModel\ConnectionViewModel.cs" />
     <Compile Include="ViewModel\ExecutionViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MessageViewModel.cs" />
     <Compile Include="ViewModel\NewsSenderViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\MessageView.xaml.cs">
+      <DependentUpon>MessageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ExecutionView.xaml.cs">
       <DependentUpon>ExecutionView.xaml</DependentUpon>
     </Compile>

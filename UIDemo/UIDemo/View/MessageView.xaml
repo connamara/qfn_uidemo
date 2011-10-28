@@ -1,0 +1,30 @@
+﻿<Grid x:Class="UIDemo.View.MessageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    >
+    
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Label Style="{StaticResource FeatureTitle}" Content="View All Messages"/>
+    <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+        <ListView IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=Messages, Mode=TwoWay}">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Timestamp, StringFormat=HH:mm:ss.fff}"/>
+                        <GridViewColumn Header="Dir" Width="35" DisplayMemberBinding="{Binding Path=Direction}"/>
+                        <!--
+                            TODO: look into this for better column layout:
+                            http://www.codeproject.com/KB/grid/ListView_layout_manager.aspx
+                        -->
+                        <GridViewColumn Header="Message" Width="400" DisplayMemberBinding="{Binding Path=MsgText}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Border>
+
+</Grid>

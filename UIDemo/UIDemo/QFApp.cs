@@ -34,6 +34,11 @@ namespace UIDemo
 
         public event Action<QuickFix.FIX42.ExecutionReport> Fix42ExecReportEvent;
 
+        /// <summary>
+        /// Triggered on any message sent or received (arg1: isIncoming)
+        /// </summary>
+        public event Action<QuickFix.Message, bool> MessageEvent;
+
 
 
         public QFApp(QuickFix.SessionSettings settings)
@@ -74,11 +79,15 @@ namespace UIDemo
         public void FromAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("## FromAdmin: " + message.ToString());
+            if (MessageEvent != null)
+                MessageEvent(message, false);
         }
 
         public void FromApp(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("## FromApp: " + message.ToString());
+            if (MessageEvent != null)
+                MessageEvent(message, false);
             Crack(message, sessionID);
         }
 
@@ -105,11 +114,15 @@ namespace UIDemo
         public void ToAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("## ToAdmin: " + message.ToString());
+            if (MessageEvent != null)
+                MessageEvent(message, true);
         }
 
         public void ToApp(QuickFix.Message message, QuickFix.SessionID sessionId)
         {
             Trace.WriteLine("## ToApp: " + message.ToString());
+            if (MessageEvent != null)
+                MessageEvent(message, true);
         }
 
         #endregion

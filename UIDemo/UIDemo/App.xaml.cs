@@ -48,6 +48,7 @@ namespace UIDemo
             MainWindow mainWindow = new MainWindow();
             mainWindow.DataContext = new MainWindowViewModel();
 
+            mainWindow.MessageView.DataContext = new MessageViewModel(_qfapp);
             mainWindow.ExecutionView.DataContext = new ExecutionViewModel(_qfapp);
             mainWindow.ConnectionView.DataContext = new ConnectionViewModel(_qfapp);
             mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
