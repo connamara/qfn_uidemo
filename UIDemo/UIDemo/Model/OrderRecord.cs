@@ -8,11 +8,11 @@ namespace UIDemo.Model
 {
     public class OrderRecord : NotifyPropertyChangedBase
     {
-        public OrderRecord(string pClOrdID, string pSymbol, bool pIsBuy, string pOrdType, decimal pPrice, string pState)
+        public OrderRecord(string pClOrdID, string pSymbol, string pSide, string pOrdType, decimal pPrice, string pState)
         {
             ClOrdID = pClOrdID;
             Symbol = pSymbol;
-            Side = pIsBuy ? "Buy" : "Sell";
+            Side = pSide;
             OrdType = pOrdType;
             Price = pPrice;
             Status = pState;

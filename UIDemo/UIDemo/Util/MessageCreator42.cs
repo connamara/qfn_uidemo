@@ -45,18 +45,39 @@ namespace UIDemo.Util
         {
             char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
 
+            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.MARKET);
+
             QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
             QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.MANUAL_ORDER);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
-            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.MARKET);
+            QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+
+            QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
+                fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
+            nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
+
+            return nos;
+        }
+
+        static public QuickFix.FIX42.NewOrderSingle LimitOrder(bool isBuy, string symbol, int orderQty, decimal price)
+        {
+            char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
+
+            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.LIMIT);
+
+            QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
+            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.MANUAL_ORDER);
+            QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
+            QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
             QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
 
             QuickFix.Fields.OrderQty fOrderQty = new QuickFix.Fields.OrderQty(orderQty);
 
             QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
-            nos.OrderQty = fOrderQty;
+            nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
+            nos.Price = new QuickFix.Fields.Price(price);
 
             return nos;
         }

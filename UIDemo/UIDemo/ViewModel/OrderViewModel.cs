@@ -122,16 +122,32 @@ namespace UIDemo.ViewModel
 
             QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.MarketOrder(isBuy, this.Symbol, Int32.Parse(this.OrderQtyString));
 
+            RecordAndSendOrder(nos);
+        }
+
+        private void SendLimitOrder(bool isBuy)
+        {
+            Trace.WriteLine(String.Format("Send Limit Order: Side={0} Symbol=[{1}] Qty=[{2}] LimitPrice=[{3}]",
+                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.LimitPriceString));
+
+            QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.LimitOrder(
+                isBuy, this.Symbol, Int32.Parse(this.OrderQtyString), Decimal.Parse(this.LimitPriceString));
+
+            RecordAndSendOrder(nos);
+        }
+
+        private void RecordAndSendOrder(QuickFix.FIX42.NewOrderSingle nos)
+        {
             lock (_ordersLock)
             {
                 decimal price = -1;
-                if (nos.OrdType.Obj != QuickFix.Fields.OrdType.MARKET)
+                if (nos.OrdType.Obj == QuickFix.Fields.OrdType.LIMIT)
                     price = nos.Price.Obj;
 
                 OrderRecord r = new OrderRecord(
                     nos.ClOrdID.Obj,
                     nos.Symbol.Obj,
-                    isBuy,
+                    FixEnumTranslator.Translate(nos.Side),
                     FixEnumTranslator.Translate(nos.OrdType),
                     price,
                     "New");
@@ -140,12 +156,6 @@ namespace UIDemo.ViewModel
             }
 
             _qfapp.Send(nos);
-        }
-
-        private void SendLimitOrder(bool isBuy)
-        {
-            Trace.WriteLine(String.Format("Send Limit Order: Side={0} Symbol=[{1}] Qty=[{2}] LimitPrice=[{3}]",
-                (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.LimitPriceString));
         }
 
         public void HandleExecutionReport(QuickFix.FIX42.ExecutionReport msg)
