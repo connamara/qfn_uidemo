@@ -10,6 +10,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UIDemo.ViewModel;
+using System.Diagnostics;
+using UIDemo.Model;
 
 namespace UIDemo.View
 {
@@ -21,6 +24,18 @@ namespace UIDemo.View
         public MessageView()
         {
             InitializeComponent();
+        }
+
+        private void CopyCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageRecord mr = lvMessages.SelectedItem as MessageRecord;
+            Clipboard.SetText(mr.MsgText);
+        }
+
+        private void CanCopyExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (lvMessages.Items.Count > 0) && (lvMessages.SelectedItem != null);
+            e.Handled = true;
         }
     }
 }

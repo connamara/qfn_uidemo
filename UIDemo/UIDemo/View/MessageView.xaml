@@ -2,7 +2,24 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     >
+
+    <Grid.CommandBindings>
+        <CommandBinding
+            Command="ApplicationCommands.Copy"
+            Executed="CopyCommandHandler"
+            CanExecute="CanCopyExecuteHandler" />
+    </Grid.CommandBindings>
     
+    <Grid.Resources>
+        <ContextMenu x:Key="SharedInstanceContextMenu">
+            <MenuItem Header="Copy Message" Command="ApplicationCommands.Copy"/>
+        </ContextMenu>
+
+        <Style x:Key="MyItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="ContextMenu" Value="{StaticResource SharedInstanceContextMenu}" />
+        </Style>
+    </Grid.Resources>
+
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
@@ -10,8 +27,10 @@
 
     <Label Style="{StaticResource FeatureTitle}" Content="View All Messages"/>
     <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
-        <ListView IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=Messages, Mode=TwoWay}">
-            <ListView.View>
+        <ListView x:Name="lvMessages" IsSynchronizedWithCurrentItem="True"
+                  ItemsSource="{Binding Path=Messages, Mode=TwoWay}"
+                  ItemContainerStyle="{StaticResource MyItemContainerStyle}">
+            <ListView.View>                
                 <GridView>
                     <GridView.Columns>
                         <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Timestamp, StringFormat=HH:mm:ss.fff}"/>
