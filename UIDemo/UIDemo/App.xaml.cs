@@ -9,6 +9,7 @@ using QuickFix;
 using UIDemo.View;
 using UIDemo.ViewModel;
 using System.Threading;
+using FIXApplication;
 
 namespace UIDemo
 {

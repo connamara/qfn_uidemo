@@ -6,6 +6,7 @@ using System.Windows.Media;
 using UIDemo.Model;
 using System.Diagnostics;
 using System.Windows.Input;
+using FIXApplication;
 
 namespace UIDemo.ViewModel
 {

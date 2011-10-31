@@ -138,7 +138,7 @@ namespace UnitTests
 
             OrderViewModel vm = new OrderViewModel(context.App);
 
-            vm.OrderType = UIDemo.Enums.OrderType.Limit;
+            vm.OrderType = FIXApplication.Enums.OrderType.Limit;
             vm.Symbol = "LIM";
             vm.OrderQtyString = "9";
             vm.LimitPriceString = "3.45";

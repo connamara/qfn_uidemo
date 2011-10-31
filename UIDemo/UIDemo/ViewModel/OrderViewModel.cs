@@ -6,8 +6,8 @@ using UIDemo.Model;
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
-using UIDemo.Util;
-using UIDemo.Enums;
+using FIXApplication.Enums;
+using FIXApplication;
 
 namespace UIDemo.ViewModel
 {

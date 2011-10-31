@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UIDemo.Model;
 using System.Collections.ObjectModel;
-using UIDemo.Util;
 using System.Diagnostics;
 using System.Windows.Threading;
+using FIXApplication;
 
 namespace UIDemo.ViewModel
 {

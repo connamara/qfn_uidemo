@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UIDemo;
+using FIXApplication;
 
 namespace UnitTests.Util
 {

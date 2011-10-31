@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:UIDemo.Controls"
     xmlns:rules="clr-namespace:UIDemo.Controls.ValidationRules"
-    xmlns:enums="clr-namespace:UIDemo.Enums"
+    xmlns:enums="clr-namespace:FIXApplication.Enums"
     >
 
     <Grid.Resources>

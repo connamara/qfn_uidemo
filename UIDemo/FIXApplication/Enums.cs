@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UIDemo.Enums
+namespace FIXApplication.Enums
 {
     public enum OrderType
     {

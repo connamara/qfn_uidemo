@@ -5,7 +5,7 @@ using System.Text;
 using UIDemo.Model;
 using System.Diagnostics;
 using System.Windows.Input;
-using UIDemo.Util;
+using FIXApplication;
 
 namespace UIDemo.ViewModel
 {

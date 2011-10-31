@@ -5,6 +5,7 @@ using System.Text;
 using UIDemo.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using FIXApplication;
 
 namespace UIDemo.ViewModel
 {

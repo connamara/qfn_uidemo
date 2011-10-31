@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UIDemo.ViewModel;
 using System.Diagnostics;
 
-namespace UIDemo
+namespace FIXApplication
 {
     public class QFApp : QuickFix.MessageCracker, QuickFix.Application
     {
