@@ -105,7 +105,9 @@ namespace FIXApplication
 
         public void OnLogout(QuickFix.SessionID sessionID)
         {
-            Trace.WriteLine(String.Format("==OnLogout: {0}==", this.ActiveSessionID.ToString()));
+            // not sure how ActiveSessionID could ever be null, but it happened.
+            string a = (this.ActiveSessionID == null) ? "null" : this.ActiveSessionID.ToString();
+            Trace.WriteLine(String.Format("==OnLogout: {0}==", a));
             if (LogoutEvent != null)
                 LogoutEvent();
         }
