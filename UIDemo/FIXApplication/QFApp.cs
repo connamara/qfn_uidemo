@@ -11,6 +11,8 @@ namespace FIXApplication
         public QuickFix.SessionID ActiveSessionID { get; set; }
         public QuickFix.SessionSettings MySessionSettings { get; set; }
 
+        private ICustomFixStrategy _strategy = null;
+
         private QuickFix.IInitiator _initiator = null;
         public QuickFix.IInitiator Initiator
         {
@@ -39,9 +41,13 @@ namespace FIXApplication
         public event Action<QuickFix.Message, bool> MessageEvent;
 
 
-
         public QFApp(QuickFix.SessionSettings settings)
+            : this(settings, new NullFixStrategy())
+        {}
+
+        public QFApp(QuickFix.SessionSettings settings, ICustomFixStrategy strategy)
         {
+            _strategy = strategy;
             ActiveSessionID = null;
             MySessionSettings = settings;
         }
@@ -49,7 +55,10 @@ namespace FIXApplication
         public void Start()
         {
             Trace.WriteLine("QFApp::Start() called");
-            Initiator.Start();
+            if(Initiator.IsStopped)
+                Initiator.Start();
+            else
+                Trace.WriteLine("(already started)");
         }
 
         public void Stop()
@@ -114,6 +123,7 @@ namespace FIXApplication
 
         public void ToAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
+            _strategy.ProcessToAdmin(message);
             Trace.WriteLine("## ToAdmin: " + message.ToString());
             if (MessageEvent != null)
                 MessageEvent(message, true);
@@ -121,6 +131,7 @@ namespace FIXApplication
 
         public void ToApp(QuickFix.Message message, QuickFix.SessionID sessionId)
         {
+            _strategy.ProcessToApp(message);
             Trace.WriteLine("## ToApp: " + message.ToString());
             if (MessageEvent != null)
                 MessageEvent(message, true);
