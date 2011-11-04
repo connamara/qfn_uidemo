@@ -11,10 +11,10 @@ namespace FIXApplication
 
         // It's the *null* strategy, so don't do anything.
 
-        public void ProcessToAdmin(QuickFix.Message msg)
+        public void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session)
         { }
 
-        public void ProcessToApp(QuickFix.Message msg)
+        public void ProcessToApp(QuickFix.Message msg, QuickFix.Session session)
         { }
 
         #endregion

@@ -10,7 +10,7 @@ namespace FIXApplication
     /// </summary>
     public interface ICustomFixStrategy
     {
-        void ProcessToAdmin(QuickFix.Message msg);
-        void ProcessToApp(QuickFix.Message msg);
+        void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session);
+        void ProcessToApp(QuickFix.Message msg, QuickFix.Session session);
     }
 }

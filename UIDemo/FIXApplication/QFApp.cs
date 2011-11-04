@@ -123,7 +123,7 @@ namespace FIXApplication
 
         public void ToAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
-            _strategy.ProcessToAdmin(message);
+            _strategy.ProcessToAdmin(message, QuickFix.Session.LookupSession(sessionID));
             Trace.WriteLine("## ToAdmin: " + message.ToString());
             if (MessageEvent != null)
                 MessageEvent(message, true);
@@ -131,7 +131,7 @@ namespace FIXApplication
 
         public void ToApp(QuickFix.Message message, QuickFix.SessionID sessionId)
         {
-            _strategy.ProcessToApp(message);
+            _strategy.ProcessToApp(message, QuickFix.Session.LookupSession(sessionId));
             Trace.WriteLine("## ToApp: " + message.ToString());
             if (MessageEvent != null)
                 MessageEvent(message, true);
