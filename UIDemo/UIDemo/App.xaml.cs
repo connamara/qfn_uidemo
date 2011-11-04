@@ -24,6 +24,16 @@ namespace UIDemo
             : base()
         { }
 
+        /// <summary>
+        /// Virtual in case you want to derive this class and pass an ICustomFixStrategy to QFApp
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns>a new QFApp object</returns>
+        protected virtual QFApp CreateQFApp(QuickFix.SessionSettings settings)
+        {
+            return new QFApp(settings);
+        }
+
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Trace.WriteLine("Uncaught exception:");
@@ -39,7 +49,7 @@ namespace UIDemo
             QuickFix.MessageStoreFactory storeFactory = new QuickFix.FileStoreFactory(settings);
             QuickFix.LogFactory logFactory = new QuickFix.ScreenLogFactory(settings);
 
-            _qfapp = new QFApp(settings);
+            _qfapp = CreateQFApp(settings);
 
             QuickFix.IInitiator initiator = new QuickFix.Transport.SocketInitiator(_qfapp, storeFactory, settings, logFactory);
             _qfapp.Initiator = initiator;
