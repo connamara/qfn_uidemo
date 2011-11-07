@@ -13,6 +13,8 @@ namespace UIDemo
     {
         QFApp _qfapp = null;
 
+        public string ConfigFile { get; set; }
+
         public void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             Trace.WriteLine("Uncaught exception:");
