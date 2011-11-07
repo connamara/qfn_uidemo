@@ -52,6 +52,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="FixEnumTranslator.cs" />
     <Compile Include="ICustomFixStrategy.cs" />
+    <Compile Include="ICustomFixStrategyFactory.cs" />
     <Compile Include="MessageCreator42.cs" />
     <Compile Include="NullFixStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

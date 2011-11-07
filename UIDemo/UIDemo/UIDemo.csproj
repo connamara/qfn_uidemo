@@ -116,6 +116,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext.cs" />
     <Compile Include="Controls\ValidationRules.cs" />
     <Compile Include="Model\ExecutionRecord.cs" />
     <Compile Include="Model\MessageRecord.cs" />
