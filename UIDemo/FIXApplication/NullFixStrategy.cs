@@ -7,9 +7,11 @@ namespace FIXApplication
 {
     public class NullFixStrategy : ICustomFixStrategy
     {
+        // It's the *null* strategy, thus this class doesn't do anything.
+
         #region ICustomFixStrategy Members
 
-        // It's the *null* strategy, so don't do anything.
+        public QuickFix.SessionSettings SessionSettings { get; set; }
 
         public void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session)
         { }
