@@ -53,6 +53,13 @@
                           ItemsSource="{Binding Path=OrderTypeChoices}"
                           SelectedValue="{Binding Path=OrderType, Mode=TwoWay}"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="TIF:" Style="{StaticResource fieldLabel}"/>
+                <ComboBox x:Name="comboTIF" Width="80"
+                          ItemsSource="{Binding Path=TimeInForceChoices}"
+                          SelectedValue="{Binding Path=TimeInForce, Mode=TwoWay}"/>
+            </StackPanel>
+
         </StackPanel>
 
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="#BBBBBB">
