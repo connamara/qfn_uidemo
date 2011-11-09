@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FIXApplication.Enums;
 
 namespace FIXApplication
 {
     public static class MessageCreator42
     {
+        static private QuickFix.Fields.Account _account = null;
+
+        static public void SetDefaultAccount(string account)
+        {
+            _account = new QuickFix.Fields.Account(account);
+        }
+
         /// <summary>
         /// Create a News message.  Nothing unexpected here.
         /// </summary>
@@ -41,14 +49,14 @@ namespace FIXApplication
         /// <param name="symbol"></param>
         /// <param name="orderQty"></param>
         /// <returns></returns>
-        static public QuickFix.FIX42.NewOrderSingle MarketOrder(bool isBuy, string symbol, int orderQty)
+        static public QuickFix.FIX42.NewOrderSingle MarketOrder(bool isBuy, string symbol, int orderQty, TimeInForce tif)
         {
             char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
 
             QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.MARKET);
 
             QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
-            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.MANUAL_ORDER);
+            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
             QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
@@ -56,18 +64,21 @@ namespace FIXApplication
             QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
             nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
+            nos.TimeInForce = FixEnumTranslator.ToField(tif);
+            if (_account != null)
+                nos.Account = _account;
 
             return nos;
         }
 
-        static public QuickFix.FIX42.NewOrderSingle LimitOrder(bool isBuy, string symbol, int orderQty, decimal price)
+        static public QuickFix.FIX42.NewOrderSingle LimitOrder(bool isBuy, string symbol, int orderQty, TimeInForce tif, decimal price)
         {
             char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
 
             QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.LIMIT);
 
             QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
-            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.MANUAL_ORDER);
+            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
             QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
@@ -78,6 +89,9 @@ namespace FIXApplication
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
             nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
             nos.Price = new QuickFix.Fields.Price(price);
+            nos.TimeInForce = FixEnumTranslator.ToField(tif);
+            if (_account != null)
+                nos.Account = _account;
 
             return nos;
         }

@@ -15,11 +15,16 @@ namespace UIDemo.ViewModel
     {
         #region Static Initialization
         static private readonly List<OrderType> _ORDERTYPE_CHOICES = new List<OrderType>();
+        static private readonly List<TimeInForce> _TIMEINFORCE_CHOICES = new List<TimeInForce>();
         static OrderViewModel() // (static constructor)
         {
             _ORDERTYPE_CHOICES.Add(OrderType.Market);
             _ORDERTYPE_CHOICES.Add(OrderType.Limit);
+
+            _TIMEINFORCE_CHOICES.Add(TimeInForce.Day);
+            _TIMEINFORCE_CHOICES.Add(TimeInForce.GoodTillCancel);
         }
+
         #endregion
 
 
@@ -74,14 +79,6 @@ namespace UIDemo.ViewModel
             set { _orderQtyString = value; base.OnPropertyChanged("OrderQtyString"); }
         }
 
-        //TODO figure out if I can make this work somehow
-        private bool _isActionsEnabled = true;
-        public bool IsActionsEnabled
-        {
-            get { return _isActionsEnabled; }
-            set { _isActionsEnabled = value; base.OnPropertyChanged("IsActionsEnabled"); }
-        }
-
         private string _limitPriceString = "0";
         public string LimitPriceString
         {
@@ -89,6 +86,20 @@ namespace UIDemo.ViewModel
             set { _limitPriceString = value; base.OnPropertyChanged("LimitPriceString"); }
         }
 
+        public List<TimeInForce> TimeInForceChoices { get { return _TIMEINFORCE_CHOICES; } }
+        private TimeInForce _timeInForce = TimeInForce.Day;
+        public TimeInForce TimeInForce
+        {
+            get { return _timeInForce; }
+            set
+            {
+                if (_timeInForce != value)
+                {
+                    _timeInForce = value;
+                    base.OnPropertyChanged("TimeInForce");
+                }
+            }
+        }
 
 
         // commands
@@ -120,7 +131,8 @@ namespace UIDemo.ViewModel
             Trace.WriteLine(String.Format("Send Market Order: Side={0} Symbol=[{1}] Qty=[{2}]",
                 (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString));
 
-            QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.MarketOrder(isBuy, this.Symbol, Int32.Parse(this.OrderQtyString));
+            QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.MarketOrder(
+                isBuy, this.Symbol, Int32.Parse(this.OrderQtyString), _timeInForce);
 
             RecordAndSendOrder(nos);
         }
@@ -131,7 +143,7 @@ namespace UIDemo.ViewModel
                 (isBuy ? "Buy" : "Sell"), this.Symbol, this.OrderQtyString, this.LimitPriceString));
 
             QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.LimitOrder(
-                isBuy, this.Symbol, Int32.Parse(this.OrderQtyString), Decimal.Parse(this.LimitPriceString));
+                isBuy, this.Symbol, Int32.Parse(this.OrderQtyString), _timeInForce, Decimal.Parse(this.LimitPriceString));
 
             RecordAndSendOrder(nos);
         }

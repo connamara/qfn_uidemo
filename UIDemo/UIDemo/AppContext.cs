@@ -28,12 +28,13 @@ namespace UIDemo
         {
             Trace.WriteLine("Application started.");
 
-            // FIX application setup
+            // FIX app settings and related
             QuickFix.SessionSettings settings = new QuickFix.SessionSettings(this.ConfigFile);
-            QuickFix.MessageStoreFactory storeFactory = new QuickFix.FileStoreFactory(settings);
-            QuickFix.LogFactory logFactory = new QuickFix.ScreenLogFactory(settings);
-
             strategy.SessionSettings = settings;
+
+            // FIX application setup
+            QuickFix.MessageStoreFactory storeFactory = new QuickFix.FileStoreFactory(settings);
+            QuickFix.LogFactory logFactory = new QuickFix.FileLogFactory(settings);
             _qfapp = new QFApp(settings, strategy);
 
             QuickFix.IInitiator initiator = new QuickFix.Transport.SocketInitiator(_qfapp, storeFactory, settings, logFactory);

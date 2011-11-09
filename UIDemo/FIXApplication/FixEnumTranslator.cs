@@ -5,6 +5,11 @@ using System.Text;
 
 namespace FIXApplication
 {
+    /// <summary>
+    /// Translate: Convert field to meaningful string
+    /// ToEnum: Convert field to a FIXApplication.Enum type
+    /// ToField: Convert an enum to a field
+    /// </summary>
     public static class FixEnumTranslator
     {
         public static string Translate(QuickFix.Fields.OrdStatus ordStatus)
@@ -65,6 +70,38 @@ namespace FIXApplication
                 case QuickFix.Fields.Side.SELL: return "Sell";
             }
             return "unknown";
+        }
+
+        /// <summary>
+        /// Throws a ArgumentException if field value isn't supported
+        /// </summary>
+        /// <param name="qf"></param>
+        /// <returns></returns>
+        public static FIXApplication.Enums.TimeInForce ToEnum(QuickFix.Fields.TimeInForce tif)
+        {
+            switch (tif.Obj)
+            {
+                case QuickFix.Fields.TimeInForce.DAY: return FIXApplication.Enums.TimeInForce.Day;
+                case QuickFix.Fields.TimeInForce.GOOD_TILL_CANCEL: return FIXApplication.Enums.TimeInForce.GoodTillCancel;
+            }
+            throw new ArgumentException(String.Format("Field value '{0}' not supported", tif.Obj));
+        }
+
+        /// <summary>
+        /// Throws a ArgumentException if param value not supported
+        /// </summary>
+        /// <param name="tif"></param>
+        /// <returns></returns>
+        public static QuickFix.Fields.TimeInForce ToField(FIXApplication.Enums.TimeInForce tif)
+        {
+            switch (tif)
+            {
+                case FIXApplication.Enums.TimeInForce.Day:
+                    return new QuickFix.Fields.TimeInForce(QuickFix.Fields.TimeInForce.DAY);
+                case FIXApplication.Enums.TimeInForce.GoodTillCancel:
+                    return new QuickFix.Fields.TimeInForce(QuickFix.Fields.TimeInForce.GOOD_TILL_CANCEL);
+            }
+            throw new ArgumentException(String.Format("Enum value '{0}' not supported", tif.ToString()));
         }
     }
 }

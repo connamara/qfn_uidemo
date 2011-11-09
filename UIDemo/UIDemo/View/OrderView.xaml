@@ -100,7 +100,7 @@
         </Border>
 
         
-        <Grid Grid.Column="2" IsEnabled="{Binding Path=IsActionsEnabled}">
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>

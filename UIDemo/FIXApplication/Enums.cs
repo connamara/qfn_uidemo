@@ -10,4 +10,11 @@ namespace FIXApplication.Enums
         Market,
         Limit
     }
+
+    public enum TimeInForce
+    {
+        Day,
+        GoodTillCancel
+        // I'm leaving the others out for now
+    }
 }

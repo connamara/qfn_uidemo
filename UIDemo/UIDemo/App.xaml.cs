@@ -17,6 +17,7 @@ namespace UIDemo
             : base()
         {
             _appContext = new AppContext();
+            _appContext.ConfigFile = "quickfix.cfg";
         }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
