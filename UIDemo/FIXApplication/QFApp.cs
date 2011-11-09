@@ -90,6 +90,9 @@ namespace FIXApplication
 
         public void FromAdmin(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
+            if (message.Header.GetString(35) == QuickFix.FIX42.Reject.MsgType)
+                Console.WriteLine("REJECT RECEIVED: " + message.ToString());
+
             Trace.WriteLine("## FromAdmin: " + message.ToString());
             if (MessageEvent != null)
                 MessageEvent(message, false);
