@@ -34,18 +34,25 @@ namespace UIDemo.ViewModel
         private Object _ordersLock = new Object();
         public ObservableCollection<OrderRecord> Orders { get; set; }
 
+        private Object _customFieldsLock = new Object();
+        public ObservableCollection<CustomFieldRecord> CustomFields { get; set; }
 
         public ICommand SendBuyCommand { get; set; }
         public ICommand SendSellCommand { get; set; }
+        public ICommand AddCustomFieldCommand { get; set; }
+        public ICommand ClearCustomFieldsCommand { get; set; }
 
         public OrderViewModel(QFApp app)
         {
             _qfapp = app;
             Orders = new ObservableCollection<OrderRecord>();
+            CustomFields = new ObservableCollection<CustomFieldRecord>();
 
             // command definitions
             SendBuyCommand = new RelayCommand(SendBuy);
             SendSellCommand = new RelayCommand(SendSell);
+            AddCustomFieldCommand = new RelayCommand(AddCustomField);
+            ClearCustomFieldsCommand = new RelayCommand(ClearCustomFields);
 
             _qfapp.Fix42ExecReportEvent += new Action<QuickFix.FIX42.ExecutionReport>(HandleExecutionReport);
         }
@@ -101,8 +108,60 @@ namespace UIDemo.ViewModel
             }
         }
 
+        private string _customFixTag = "58";
+        public string CustomFixTag
+        {
+            get { return _customFixTag; }
+            set { _customFixTag = value; base.OnPropertyChanged("CustomFixTag"); }
+        }
+
+        private string _customFixValue = "some string";
+        public string CustomFixValue
+        {
+            get { return _customFixValue; }
+            set { _customFixValue = value; base.OnPropertyChanged("CustomFixValue"); }
+        }
 
         // commands
+        private void AddCustomField(object obj)
+        {
+            try
+            {
+                int tag = int.Parse(this.CustomFixTag);
+                lock (_customFieldsLock)
+                {
+                    foreach (CustomFieldRecord r in CustomFields)
+                    {
+                        if (r.Tag == tag)
+                        {
+                            r.Value = this.CustomFixValue;
+                            return;
+                        }
+                    }
+                    CustomFields.Add(new CustomFieldRecord(tag, this.CustomFixValue));
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
+        }
+
+        private void ClearCustomFields(object obj)
+        {
+            try
+            {
+                lock (_customFieldsLock)
+                {
+                    CustomFields.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
+        }
+
         private void SendBuy(object obj) { SendOrder(true); }
         private void SendSell(object obj) { SendOrder(false); }
 

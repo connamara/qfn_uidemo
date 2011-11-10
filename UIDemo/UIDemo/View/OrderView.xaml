@@ -60,7 +60,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Column="1"> <!-- outer StackPanel so border won't expand to full height -->
+        <StackPanel Grid.Column="1"> <!-- outer StackPanel so border won't expand to available height -->
             <Border BorderThickness="1" BorderBrush="#BBBBBB" Padding="0,0,0,20">
                 <StackPanel Orientation="Vertical">
                     <StackPanel.Resources>
@@ -129,11 +129,27 @@
 
         <Border Grid.Column="3" BorderThickness="1" BorderBrush="#BBBBBB">
             <Grid>
+                <Grid.Resources>
+                    <Style x:Key="AddCustomFieldButtonEnabled" TargetType="{x:Type Button}">
+                        <Setter Property="IsEnabled" Value="false"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ElementName=txtCustomFixTag, Path=(Validation.HasError)}" Value="false"/>
+                                    <Condition Binding="{Binding ElementName=txtCustomFixValue, Path=(Validation.HasError)}" Value="false"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="true"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
                 <Label Grid.Row="0" FontWeight="Bold"
@@ -149,7 +165,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <Label Grid.Column="0" Grid.Row="0" Content="Tag" Padding="0"/>
-                    <TextBox Grid.Column="0" Grid.Row="1" Width="30" Margin="2,0,2,0">
+                    <TextBox Grid.Column="0" Grid.Row="1" x:Name="txtCustomFixTag" Width="30" Margin="2,0,2,0">
                         <TextBox.Text>
                             <Binding Path="CustomFixTag" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -160,7 +176,7 @@
                     </TextBox>
                     
                     <Label Grid.Column="1" Grid.Row="0" Content="Value" Padding="0"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Width="80" Margin="2,0,2,0">
+                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="txtCustomFixValue" Width="80" Margin="2,0,2,0">
                         <TextBox.Text>
                             <Binding Path="CustomFixValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -170,7 +186,9 @@
                         </TextBox.Text>
                     </TextBox>
                 </Grid>
-                <Button Grid.Row="2" Content="Add Custom Field" Command="{Binding Path=AddCustomFieldCommand}"
+                <Button Grid.Row="2" Content="Add Custom Field"
+                        Style="{StaticResource AddCustomFieldButtonEnabled}"
+                        Command="{Binding Path=AddCustomFieldCommand}"
                         MaxWidth="100" HorizontalAlignment="Center"/>
 
                 <ListView Grid.Row="3" Margin="20,10,20,0" IsSynchronizedWithCurrentItem="True"
@@ -186,11 +204,14 @@
                         <GridView>
                             <GridView.Columns>
                                 <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding Path=Tag}"/>
-                                <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Path=Val}"/>
+                                <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Path=Value}"/>
                             </GridView.Columns>
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button Grid.Row="4" Content="Clear All" Command="{Binding Path=ClearCustomFieldsCommand}"
+                        MaxWidth="100" HorizontalAlignment="Center"/>
 
             </Grid>
         </Border>
