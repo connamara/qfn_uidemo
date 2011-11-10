@@ -21,6 +21,5 @@ namespace FIXApplication.Enums
     {
         Day,
         GoodTillCancel
-        // I'm leaving the others out for now
     }
 }

@@ -95,14 +95,14 @@ namespace FIXApplication
 
             Trace.WriteLine("## FromAdmin: " + message.ToString());
             if (MessageEvent != null)
-                MessageEvent(message, false);
+                MessageEvent(message, true);
         }
 
         public void FromApp(QuickFix.Message message, QuickFix.SessionID sessionID)
         {
             Trace.WriteLine("## FromApp: " + message.ToString());
             if (MessageEvent != null)
-                MessageEvent(message, false);
+                MessageEvent(message, true);
             Crack(message, sessionID);
         }
 
@@ -133,7 +133,7 @@ namespace FIXApplication
             _strategy.ProcessToAdmin(message, QuickFix.Session.LookupSession(sessionID));
             Trace.WriteLine("## ToAdmin: " + message.ToString());
             if (MessageEvent != null)
-                MessageEvent(message, true);
+                MessageEvent(message, false);
         }
 
         public void ToApp(QuickFix.Message message, QuickFix.SessionID sessionId)
@@ -141,7 +141,7 @@ namespace FIXApplication
             _strategy.ProcessToApp(message, QuickFix.Session.LookupSession(sessionId));
             Trace.WriteLine("## ToApp: " + message.ToString());
             if (MessageEvent != null)
-                MessageEvent(message, true);
+                MessageEvent(message, false);
         }
 
         #endregion

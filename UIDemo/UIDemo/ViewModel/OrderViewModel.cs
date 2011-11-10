@@ -173,11 +173,15 @@ namespace UIDemo.ViewModel
                     this.OrderType.ToString(), side.ToString(), this.Symbol,
                     this.OrderQtyString, this.LimitPriceString, this.TimeInForce.ToString()));
 
+                Dictionary<int, string> customFieldsDict = new Dictionary<int, string>();
+                foreach (CustomFieldRecord cfr in this.CustomFields)
+                    customFieldsDict[cfr.Tag] = cfr.Value;
+
                 int orderQty = int.Parse(this.OrderQtyString);
                 decimal limitPrice = decimal.Parse(this.LimitPriceString);
 
                 QuickFix.FIX42.NewOrderSingle nos = MessageCreator42.NewOrderSingle(
-                    new Dictionary<int, string>(),
+                    customFieldsDict,
                     this.OrderType, side, this.Symbol, orderQty, this.TimeInForce, limitPrice);
 
                 lock (_ordersLock)

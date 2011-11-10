@@ -76,6 +76,10 @@ namespace FIXApplication
             if (orderType == OrderType.Limit)
                 nos.Price = new QuickFix.Fields.Price(price);
 
+            // add custom fields
+            foreach (KeyValuePair<int,string> p in customFields)
+                nos.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
+
             // this kludge needs to go
             if (_account != null)
                 nos.Account = _account;
