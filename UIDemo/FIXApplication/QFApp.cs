@@ -50,10 +50,6 @@ namespace FIXApplication
             _strategy = strategy;
             ActiveSessionID = null;
             MySessionSettings = settings;
-
-            // a kludge you should probably not emulate
-            if (settings.Get().Has("account"))
-                MessageCreator42.SetDefaultAccount(settings.Get().GetString("account"));
         }
 
         public void Start()
