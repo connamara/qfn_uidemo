@@ -5,6 +5,12 @@ using System.Text;
 
 namespace FIXApplication.Enums
 {
+    public enum Side
+    {
+        Buy,
+        Sell
+    }
+
     public enum OrderType
     {
         Market,

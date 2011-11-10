@@ -43,20 +43,27 @@ namespace FIXApplication
         }
 
         /// <summary>
-        /// Creates a NewOrderSingle; the ClOrdID will be set based on the time.
+        /// 
         /// </summary>
-        /// <param name="isBuy"></param>
+        /// <param name="customFields"></param>
+        /// <param name="orderType"></param>
+        /// <param name="side"></param>
         /// <param name="symbol"></param>
         /// <param name="orderQty"></param>
+        /// <param name="tif"></param>
+        /// <param name="price">ignored if orderType=Market</param>
         /// <returns></returns>
-        static public QuickFix.FIX42.NewOrderSingle MarketOrder(bool isBuy, string symbol, int orderQty, TimeInForce tif)
+        static public QuickFix.FIX42.NewOrderSingle NewOrderSingle(
+            Dictionary<int,string> customFields,
+            OrderType orderType, Side side, string symbol,
+            int orderQty, TimeInForce tif, decimal price)
         {
-            char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
-
-            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.MARKET);
-
-            QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
+            // hard-coded fields
             QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE);
+            
+            // from params
+            QuickFix.Fields.OrdType fOrdType = FixEnumTranslator.ToField(orderType);
+            QuickFix.Fields.Side fSide = FixEnumTranslator.ToField(side);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
             QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
@@ -65,31 +72,11 @@ namespace FIXApplication
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
             nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
             nos.TimeInForce = FixEnumTranslator.ToField(tif);
-            if (_account != null)
-                nos.Account = _account;
 
-            return nos;
-        }
+            if (orderType == OrderType.Limit)
+                nos.Price = new QuickFix.Fields.Price(price);
 
-        static public QuickFix.FIX42.NewOrderSingle LimitOrder(bool isBuy, string symbol, int orderQty, TimeInForce tif, decimal price)
-        {
-            char side_enum = isBuy ? QuickFix.Fields.Side.BUY : QuickFix.Fields.Side.SELL;
-
-            QuickFix.Fields.OrdType fOrdType = new QuickFix.Fields.OrdType(QuickFix.Fields.OrdType.LIMIT);
-
-            QuickFix.Fields.Side fSide = new QuickFix.Fields.Side(side_enum);
-            QuickFix.Fields.HandlInst fHandlInst = new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE);
-            QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
-            QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
-            QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
-
-            QuickFix.Fields.OrderQty fOrderQty = new QuickFix.Fields.OrderQty(orderQty);
-
-            QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
-                fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
-            nos.OrderQty = new QuickFix.Fields.OrderQty(orderQty);
-            nos.Price = new QuickFix.Fields.Price(price);
-            nos.TimeInForce = FixEnumTranslator.ToField(tif);
+            // this kludge needs to go
             if (_account != null)
                 nos.Account = _account;
 
