@@ -48,7 +48,7 @@ namespace UIDemo
             mainWindow.MessageView.DataContext = new MessageViewModel(_qfapp);
             mainWindow.ExecutionView.DataContext = new ExecutionViewModel(_qfapp);
             mainWindow.ConnectionView.DataContext = new ConnectionViewModel(_qfapp);
-            mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp);
+            mainWindow.OrderView.DataContext = new OrderViewModel(_qfapp, strategy);
             mainWindow.NewsSenderView.DataContext = new NewsSenderViewModel(_qfapp);
 
             // Set the main UI dispatcher

@@ -30,6 +30,7 @@ namespace UIDemo.ViewModel
 
         // instance stuff
         private QFApp _qfapp = null;
+        private ICustomFixStrategy _strategy = null;
 
         private Object _ordersLock = new Object();
         public ObservableCollection<OrderRecord> Orders { get; set; }
@@ -42,9 +43,10 @@ namespace UIDemo.ViewModel
         public ICommand AddCustomFieldCommand { get; set; }
         public ICommand ClearCustomFieldsCommand { get; set; }
 
-        public OrderViewModel(QFApp app)
+        public OrderViewModel(QFApp app, ICustomFixStrategy strategy)
         {
             _qfapp = app;
+            _strategy = strategy;
             Orders = new ObservableCollection<OrderRecord>();
             CustomFields = new ObservableCollection<CustomFieldRecord>();
 
@@ -55,6 +57,10 @@ namespace UIDemo.ViewModel
             ClearCustomFieldsCommand = new RelayCommand(ClearCustomFields);
 
             _qfapp.Fix42ExecReportEvent += new Action<QuickFix.FIX42.ExecutionReport>(HandleExecutionReport);
+
+            // load pre-set custom fields from strategy, if it has any
+            foreach (KeyValuePair<int, string> p in strategy.DefaultNewOrderSingleCustomFields)
+                CustomFields.Add(new CustomFieldRecord(p.Key, p.Value));
         }
 
         public List<OrderType> OrderTypeChoices { get { return _ORDERTYPE_CHOICES; } }

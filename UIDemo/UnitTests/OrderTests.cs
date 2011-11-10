@@ -45,7 +45,7 @@ namespace UnitTests
             UnitTestContext context = new UnitTestContext();
             context.Login();
 
-            OrderViewModel vm = new OrderViewModel(context.App);
+            OrderViewModel vm = new OrderViewModel(context.App, new FIXApplication.NullFixStrategy());
 
             vm.SendBuyCommand.Execute(null);
 
@@ -72,7 +72,7 @@ namespace UnitTests
             UnitTestContext context = new UnitTestContext();
             context.Login();
 
-            OrderViewModel vm = new OrderViewModel(context.App);
+            OrderViewModel vm = new OrderViewModel(context.App, new FIXApplication.NullFixStrategy());
 
             vm.Symbol = "pants";
             vm.OrderQtyString = "999";
@@ -100,7 +100,7 @@ namespace UnitTests
             UnitTestContext context = new UnitTestContext();
             context.Login();
 
-            OrderViewModel vm = new OrderViewModel(context.App);
+            OrderViewModel vm = new OrderViewModel(context.App, new FIXApplication.NullFixStrategy());
 
             // send an order
             vm.SendBuyCommand.Execute(null);
@@ -136,7 +136,7 @@ namespace UnitTests
             UnitTestContext context = new UnitTestContext();
             context.Login();
 
-            OrderViewModel vm = new OrderViewModel(context.App);
+            OrderViewModel vm = new OrderViewModel(context.App, new FIXApplication.NullFixStrategy());
 
             vm.OrderType = FIXApplication.Enums.OrderType.Limit;
             vm.Symbol = "LIM";

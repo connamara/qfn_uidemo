@@ -13,6 +13,9 @@ namespace FIXApplication
 
         public QuickFix.SessionSettings SessionSettings { get; set; }
 
+        public Dictionary<int, string> DefaultNewOrderSingleCustomFields
+        { get { return new Dictionary<int, string>(); } }
+
         public void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session)
         { }
 
