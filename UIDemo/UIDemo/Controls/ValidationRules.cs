@@ -8,6 +8,17 @@ namespace UIDemo.Controls
 {
     namespace ValidationRules
     {
+        public class NotEmptyRule : ValidationRule
+        {
+            public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+            {
+                string v = (value as string);
+                if (v.Length == 0)
+                    return new ValidationResult(false, "Field can't be empty");
+                return new ValidationResult(true, null);
+            }
+        }
+
         public class PositiveDecimalRule : ValidationRule
         {
             public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)

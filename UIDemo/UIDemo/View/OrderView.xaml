@@ -15,18 +15,17 @@
     
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
+        <RowDefinition MinHeight="200"/>
         <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <Label Grid.Row="0" Style="{StaticResource FeatureTitle}" Content="Send/View Orders"/>
 
     <Grid Grid.Row="1">
-        
-        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -59,71 +58,142 @@
                           ItemsSource="{Binding Path=TimeInForceChoices}"
                           SelectedValue="{Binding Path=TimeInForce, Mode=TwoWay}"/>
             </StackPanel>
-
         </StackPanel>
 
-        <Border Grid.Column="1" BorderThickness="1" BorderBrush="#BBBBBB">
-            <StackPanel Orientation="Vertical">
-                <StackPanel.Resources>
-                    <Style x:Key="MarketFields" TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Market">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                    <Style x:Key="LimitFields" TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Limit">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Resources>
-                
-                <Label FontWeight="Bold" Content="OrdType-specific fields:" HorizontalContentAlignment="Center"/>
+        <StackPanel Grid.Column="1"> <!-- outer StackPanel so border won't expand to full height -->
+            <Border BorderThickness="1" BorderBrush="#BBBBBB" Padding="0,0,0,20">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel.Resources>
+                        <Style x:Key="MarketFields" TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Market">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style x:Key="LimitFields" TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=SelectedValue, ElementName=comboOrdType}" Value="Limit">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+                    
+                    <Label FontWeight="Bold" Content="OrdType-specific fields:" HorizontalContentAlignment="Center"/>
 
-                <StackPanel Style="{StaticResource MarketFields}">
-                    <Label Content="(none)" HorizontalContentAlignment="Center"/>
+                    <StackPanel Style="{StaticResource MarketFields}">
+                        <Label Content="(none)" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource LimitFields}" Orientation="Horizontal">
+                        <Label Content="Price:" Style="{StaticResource fieldLabel}"/>
+                        <TextBox Width="80">
+                            <TextBox.Text>
+                                <Binding Path="LimitPriceString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                    <Binding.ValidationRules>
+                                        <rules:PositiveDecimalRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </StackPanel>
+
                 </StackPanel>
+            </Border>
+        </StackPanel>
 
-                <StackPanel Style="{StaticResource LimitFields}" Orientation="Horizontal">
-                    <Label Content="Price:" Style="{StaticResource fieldLabel}"/>
-                    <TextBox Width="80">
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="MinWidth" Value="80"/>
+                    <Setter Property="MinHeight" Value="40"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+            </Grid.Resources>
+
+            <Button Grid.Row="0" Content="BUY" Command="{Binding Path=SendBuyCommand}"
+                    Margin="20,10,20,0"/>
+            <Button Grid.Row="1" Content="SELL" Command="{Binding Path=SendSellCommand}"
+                    Margin="20,10,20,0"/>
+        </Grid>
+
+        <Border Grid.Column="3" BorderThickness="1" BorderBrush="#BBBBBB">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Label Grid.Row="0" FontWeight="Bold"
+                       Content="Custom FIX fields:" HorizontalContentAlignment="Center"/>
+                <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Grid.Column="0" Grid.Row="0" Content="Tag" Padding="0"/>
+                    <TextBox Grid.Column="0" Grid.Row="1" Width="30" Margin="2,0,2,0">
                         <TextBox.Text>
-                            <Binding Path="LimitPriceString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding Path="CustomFixTag" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <rules:PositiveDecimalRule/>
                                 </Binding.ValidationRules>
                             </Binding>
+                        </TextBox.Text>      
+                    </TextBox>
+                    
+                    <Label Grid.Column="1" Grid.Row="0" Content="Value" Padding="0"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Width="80" Margin="2,0,2,0">
+                        <TextBox.Text>
+                            <Binding Path="CustomFixValue" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <rules:NotEmptyRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
                         </TextBox.Text>
                     </TextBox>
-                </StackPanel>
+                </Grid>
+                <Button Grid.Row="2" Content="Add Custom Field" Command="{Binding Path=AddCustomFieldCommand}"
+                        MaxWidth="100" HorizontalAlignment="Center"/>
 
+                <ListView Grid.Row="3" Margin="20,10,20,0" IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Path=CustomFields, Mode=TwoWay}">
+                    <ListView.Resources>
+                        <!--
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                        -->
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding Path=Tag}"/>
+                                <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Path=Val}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-            </StackPanel>
+            </Grid>
         </Border>
-
-        
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0"/>
-            <Button Grid.Row="1" Content="Send Buy Order" Command="{Binding Path=SendBuyCommand}"
-                                MinWidth="80" MinHeight="40" HorizontalAlignment="Center"/>
-            <Label Grid.Row="2"/>
-            <Button Grid.Row="3" Content="Send Sell Order" Command="{Binding Path=SendSellCommand}"
-                                MinWidth="80" MinHeight="40" HorizontalAlignment="Center"/>
-            <Label Grid.Row="4"/>
-        </Grid>
     </Grid>
 
     <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
