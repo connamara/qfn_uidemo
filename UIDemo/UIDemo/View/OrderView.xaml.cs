@@ -10,6 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UIDemo.Model;
+using UIDemo.ViewModel;
 
 namespace UIDemo.View
 {
@@ -21,6 +23,18 @@ namespace UIDemo.View
         public OrderView()
         {
             InitializeComponent();
+        }
+
+        private void DeleteCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            CustomFieldRecord cfr = lvCustomFields.SelectedItem as CustomFieldRecord;
+            (DataContext as OrderViewModel).DeleteCustomField(cfr);
+        }
+
+        private void CanDeleteExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (lvCustomFields.Items.Count > 0) && (lvCustomFields.SelectedItem != null);
+            e.Handled = true;
         }
     }
 }

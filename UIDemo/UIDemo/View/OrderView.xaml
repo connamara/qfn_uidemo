@@ -142,6 +142,21 @@
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
+
+                    <ContextMenu x:Key="CustomFieldContextMenu">
+                        <!-- This CommandBindings thing is due to a bull$#%& WPF bug, probably -->
+                        <!-- http://www.wiredprairie.us/journal/2007/04/commandtarget_menuitem_context.html -->
+                        <!-- http://stackoverflow.com/questions/3921712/wpf-custom-command-in-context-menu-are-disabled-until-any-button-clicked -->
+                        <ContextMenu.CommandBindings>
+                            <CommandBinding Command="ApplicationCommands.Delete" CanExecute="CanDeleteExecuteHandler" Executed="DeleteCommandHandler"/>
+                        </ContextMenu.CommandBindings>
+                        <MenuItem Header="Delete Custom Field" Command="ApplicationCommands.Delete"/>
+                    </ContextMenu>
+
+                    <Style x:Key="CustomFieldListItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="ContextMenu" Value="{StaticResource CustomFieldContextMenu}" />
+                    </Style>
+
                 </Grid.Resources>
                 
                 <Grid.RowDefinitions>
@@ -149,6 +164,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
@@ -191,8 +207,10 @@
                         Command="{Binding Path=AddCustomFieldCommand}"
                         MaxWidth="100" HorizontalAlignment="Center"/>
 
-                <ListView Grid.Row="3" Margin="20,10,20,0" IsSynchronizedWithCurrentItem="True"
-                          ItemsSource="{Binding Path=CustomFields, Mode=TwoWay}">
+                <ListView x:Name="lvCustomFields"
+                          Grid.Row="3" Margin="20,10,20,0" IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Path=CustomFields, Mode=TwoWay}"
+                          ItemContainerStyle="{StaticResource CustomFieldListItemContainerStyle}">
                     <ListView.Resources>
                         <!--
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -210,7 +228,10 @@
                     </ListView.View>
                 </ListView>
 
-                <Button Grid.Row="4" Content="Clear All" Command="{Binding Path=ClearCustomFieldsCommand}"
+                <TextBlock Grid.Row="4" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="20,0,20,5"
+                           Text="Right-click a row to remove a specific tag" />
+                
+                <Button Grid.Row="5" Content="Clear All" Command="{Binding Path=ClearCustomFieldsCommand}"
                         MaxWidth="100" HorizontalAlignment="Center"/>
 
             </Grid>

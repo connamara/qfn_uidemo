@@ -153,6 +153,26 @@ namespace UIDemo.ViewModel
             }
         }
 
+        public void DeleteCustomField(CustomFieldRecord cfr)
+        {
+            try
+            {
+                lock (_customFieldsLock)
+                {
+                    for (int i = CustomFields.Count - 1; i >= 0; i--)
+                    {
+                        CustomFieldRecord item = CustomFields[i];
+                        if (cfr.Tag == item.Tag)
+                            CustomFields.RemoveAt(i);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
+        }
+
         private void ClearCustomFields(object obj)
         {
             try
