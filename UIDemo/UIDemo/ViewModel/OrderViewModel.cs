@@ -265,5 +265,24 @@ namespace UIDemo.ViewModel
                 Trace.WriteLine(e.ToString());
             }
         }
+
+        public void CancelOrder(OrderRecord or)
+        {
+            try
+            {
+                QuickFix.FIX42.OrderCancelRequest orq = new QuickFix.FIX42.OrderCancelRequest(
+                    new QuickFix.Fields.OrigClOrdID(or.ClOrdID), // good enough?
+                    new QuickFix.Fields.ClOrdID(or.ClOrdID),
+                    new QuickFix.Fields.Symbol(or.Symbol),
+                    new QuickFix.Fields.Side('1'), // fix this
+                    new QuickFix.Fields.TransactTime(DateTime.Now));
+
+                _qfapp.Send(orq);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
+        }
     }
 }

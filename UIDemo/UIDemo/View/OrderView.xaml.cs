@@ -36,5 +36,17 @@ namespace UIDemo.View
             e.CanExecute = (lvCustomFields.Items.Count > 0) && (lvCustomFields.SelectedItem != null);
             e.Handled = true;
         }
+
+        private void CancelCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            OrderRecord or = lvOrders.SelectedItem as OrderRecord;
+            (DataContext as OrderViewModel).CancelOrder(or);
+        }
+
+        private void CanCancelExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (lvOrders.Items.Count > 0) && (lvOrders.SelectedItem != null);
+            e.Handled = true;
+        }
     }
 }

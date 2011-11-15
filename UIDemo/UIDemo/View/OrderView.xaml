@@ -144,9 +144,6 @@
                     </Style>
 
                     <ContextMenu x:Key="CustomFieldContextMenu">
-                        <!-- This CommandBindings thing is due to a bull$#%& WPF bug, probably -->
-                        <!-- http://www.wiredprairie.us/journal/2007/04/commandtarget_menuitem_context.html -->
-                        <!-- http://stackoverflow.com/questions/3921712/wpf-custom-command-in-context-menu-are-disabled-until-any-button-clicked -->
                         <ContextMenu.CommandBindings>
                             <CommandBinding Command="ApplicationCommands.Delete" CanExecute="CanDeleteExecuteHandler" Executed="DeleteCommandHandler"/>
                         </ContextMenu.CommandBindings>
@@ -239,7 +236,22 @@
     </Grid>
 
     <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
-        <ListView IsSynchronizedWithCurrentItem="True"  ItemsSource="{Binding Path=Orders, Mode=TwoWay}">
+        <Border.Resources>
+            <ContextMenu x:Key="OrdersContextMenu">
+                <ContextMenu.CommandBindings>
+                    <CommandBinding Command="controls:OrderCommands.Cancel" CanExecute="CanCancelExecuteHandler" Executed="CancelCommandHandler"/>
+                </ContextMenu.CommandBindings>
+                <MenuItem Header="Send OrderCancelRequest" Command="controls:OrderCommands.Cancel"/>
+            </ContextMenu>
+
+            <Style x:Key="CustomFieldListItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="ContextMenu" Value="{StaticResource OrdersContextMenu}" />
+            </Style>
+        </Border.Resources>
+        
+        <ListView x:Name="lvOrders" IsSynchronizedWithCurrentItem="True"
+                  ItemsSource="{Binding Path=Orders, Mode=TwoWay}"
+                  ItemContainerStyle="{StaticResource CustomFieldListItemContainerStyle}">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
