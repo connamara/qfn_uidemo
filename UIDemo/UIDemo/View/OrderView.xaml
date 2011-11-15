@@ -235,36 +235,44 @@
         </Border>
     </Grid>
 
-    <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
-        <Border.Resources>
-            <ContextMenu x:Key="OrdersContextMenu">
-                <ContextMenu.CommandBindings>
-                    <CommandBinding Command="controls:OrderCommands.Cancel" CanExecute="CanCancelExecuteHandler" Executed="CancelCommandHandler"/>
-                </ContextMenu.CommandBindings>
-                <MenuItem Header="Send OrderCancelRequest" Command="controls:OrderCommands.Cancel"/>
-            </ContextMenu>
+    <Grid Grid.Row="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <Style x:Key="CustomFieldListItemContainerStyle" TargetType="{x:Type ListBoxItem}">
-                <Setter Property="ContextMenu" Value="{StaticResource OrdersContextMenu}" />
-            </Style>
-        </Border.Resources>
-        
-        <ListView x:Name="lvOrders" IsSynchronizedWithCurrentItem="True"
-                  ItemsSource="{Binding Path=Orders, Mode=TwoWay}"
-                  ItemContainerStyle="{StaticResource CustomFieldListItemContainerStyle}">
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <GridViewColumn Header="ClOrdID" DisplayMemberBinding="{Binding Path=ClOrdID}"/>
-                        <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Path=Symbol}"/>
-                        <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
-                        <GridViewColumn Header="OrdType" DisplayMemberBinding="{Binding Path=OrdType}"/>
-                        <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Path=Price}"/>
-                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Border>
+        <Label Grid.Row="0" Content="Right-click a row below to cancel an order" HorizontalContentAlignment="Center" Margin="0,5,0,0"/>
 
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="0">
+            <Border.Resources>
+                <ContextMenu x:Key="OrdersContextMenu">
+                    <ContextMenu.CommandBindings>
+                        <CommandBinding Command="controls:OrderCommands.Cancel" CanExecute="CanCancelExecuteHandler" Executed="CancelCommandHandler"/>
+                    </ContextMenu.CommandBindings>
+                    <MenuItem Header="Send OrderCancelRequest" Command="controls:OrderCommands.Cancel"/>
+                </ContextMenu>
+
+                <Style x:Key="CustomFieldListItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="ContextMenu" Value="{StaticResource OrdersContextMenu}" />
+                </Style>
+            </Border.Resources>
+
+            <ListView x:Name="lvOrders" IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{Binding Path=Orders, Mode=TwoWay}"
+                      ItemContainerStyle="{StaticResource CustomFieldListItemContainerStyle}">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn Header="ClOrdID" DisplayMemberBinding="{Binding Path=ClOrdID}"/>
+                            <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Path=Symbol}"/>
+                            <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
+                            <GridViewColumn Header="OrdType" DisplayMemberBinding="{Binding Path=OrdType}"/>
+                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Path=Price}"/>
+                            <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+    </Grid>
 </Grid>
