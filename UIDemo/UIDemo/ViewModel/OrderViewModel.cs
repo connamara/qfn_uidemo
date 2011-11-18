@@ -252,7 +252,8 @@ namespace UIDemo.ViewModel
                         if (r.ClOrdID == ordId)
                         {
                             r.Status = status;
-                            r.Price = msg.LastPx.Obj;
+                            if(msg.IsSetLastPx)
+                                r.Price = msg.LastPx.Obj;
                             return;
                         }
                     }
