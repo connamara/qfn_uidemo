@@ -26,7 +26,7 @@ namespace UnitTests
             decimal avgpx)
         {
             return new QuickFix.FIX42.ExecutionReport(
-                new QuickFix.Fields.OrderID(orderid),
+                new QuickFix.Fields.OrderID("FOO_ORDERID"),
                 new QuickFix.Fields.ExecID(execid),
                 new QuickFix.Fields.ExecTransType(exectranstype),
                 new QuickFix.Fields.ExecType(exectype),
@@ -102,32 +102,33 @@ namespace UnitTests
 
             OrderViewModel vm = new OrderViewModel(context.App, new FIXApplication.NullFixStrategy());
 
-            // send an order
+            // send an order with default arguments
             vm.SendBuyCommand.Execute(null);
             Assert.AreEqual(1, context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType].Count);
             QuickFix.FIX42.NewOrderSingle msg = context.Session.MsgLookup[QuickFix.FIX42.NewOrderSingle.MsgType][0] as QuickFix.FIX42.NewOrderSingle; 
 
             // verify grid content (redundant with earlier tests, but whatever)
             Assert.AreEqual(1, vm.Orders.Count);
-            OrderRecord o = vm.Orders.First();
-            Assert.AreEqual("IBM", o.Symbol);
-            Assert.AreEqual(-1, o.Price);
-            Assert.AreEqual("Market", o.OrdType);
-            Assert.AreEqual("Buy", o.Side);
-            Assert.AreEqual("New", o.Status);
+            OrderRecord or = vm.Orders.First();
+            Assert.AreEqual("IBM", or.Symbol);
+            Assert.AreEqual(-1, or.Price);
+            Assert.AreEqual("Market", or.OrdType);
+            Assert.AreEqual("Buy", or.Side);
+            Assert.AreEqual("New", or.Status);
 
             // send an execution report that will update the grid
             QuickFix.FIX42.ExecutionReport r = CreateExReport(
-                o.ClOrdID, "foo", QuickFix.Fields.ExecTransType.NEW, QuickFix.Fields.ExecType.FILL,
+                or.ClOrdID, "foo", QuickFix.Fields.ExecTransType.NEW, QuickFix.Fields.ExecType.FILL,
                 QuickFix.Fields.OrdStatus.FILLED, "IBM", QuickFix.Fields.Side.BUY, 0, 0, 0);
             r.LastPx = new QuickFix.Fields.LastPx(999m);
             r.ClOrdID = new QuickFix.Fields.ClOrdID(msg.ClOrdID.Obj);
+
             context.App.FromApp(r, context.Session.SessionID);
 
             // check that it got changed
             Assert.AreEqual(1, vm.Orders.Count);
-            Assert.AreEqual(999, o.Price);
-            Assert.AreEqual("Filled", o.Status);
+            Assert.AreEqual(999, or.Price);
+            Assert.AreEqual("Filled", or.Status);
         }
 
         [Test]

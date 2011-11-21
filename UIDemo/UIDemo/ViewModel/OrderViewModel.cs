@@ -229,27 +229,29 @@ namespace UIDemo.ViewModel
         {
             try
             {
-                string ordId = msg.ClOrdID.Obj;
+                string clOrdId = msg.ClOrdID.Obj;
                 string status = FixEnumTranslator.Translate(msg.OrdStatus);
 
-                Trace.WriteLine("OVM: Handling ExecutionReport: " + ordId + " / " + status);
+                Trace.WriteLine("OVM: Handling ExecutionReport: " + clOrdId + " / " + status);
 
                 lock (_ordersLock)
                 {
                     foreach (OrderRecord r in Orders)
                     {
-                        if (r.ClOrdID == ordId)
+                        if (r.ClOrdID == clOrdId)
                         {
                             r.Status = status;
-                            if(msg.IsSetLastPx())
+                            if (msg.IsSetLastPx())
                                 r.Price = msg.LastPx.Obj;
-                            r.OrderID = msg.OrderID.Obj;
+                            if (msg.IsSetOrderID())
+                                r.OrderID = msg.OrderID.Obj;
+
                             return;
                         }
                     }
                 }
 
-                Trace.WriteLine("OVM: No order corresponds to ClOrdID '" + ordId + "'");
+                Trace.WriteLine("OVM: No order corresponds to ClOrdID '" + clOrdId + "'");
             }
             catch (Exception e)
             {

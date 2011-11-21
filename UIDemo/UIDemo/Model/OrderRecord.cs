@@ -73,9 +73,7 @@ namespace UIDemo.Model
         public string OrderID
         {
             get { return _orderID; }
-            set { _status = value; OnPropertyChanged("OrderID"); }
+            set { _orderID = value; OnPropertyChanged("OrderID"); }
         }
-
-
     }
 }
