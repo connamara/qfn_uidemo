@@ -144,11 +144,15 @@ namespace FIXApplication
 
 
         public void OnMessage(QuickFix.FIX42.BusinessMessageReject msg, QuickFix.SessionID s) { }
+        public void OnMessage(QuickFix.FIX42.OrderCancelReject msg, QuickFix.SessionID s) { }
 
         public void OnMessage(QuickFix.FIX42.ExecutionReport msg, QuickFix.SessionID s) 
         {
             if (Fix42ExecReportEvent != null)
                 Fix42ExecReportEvent(msg);
         }
+
+
+
     }
 }

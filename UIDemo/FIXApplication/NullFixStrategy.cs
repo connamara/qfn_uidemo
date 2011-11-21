@@ -16,11 +16,10 @@ namespace FIXApplication
         public Dictionary<int, string> DefaultNewOrderSingleCustomFields
         { get { return new Dictionary<int, string>(); } }
 
-        public void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session)
-        { }
+        public void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session) { }
+        public void ProcessToApp(QuickFix.Message msg, QuickFix.Session session) { }
 
-        public void ProcessToApp(QuickFix.Message msg, QuickFix.Session session)
-        { }
+        public void ProcessOrderCancelRequest(QuickFix.FIX42.NewOrderSingle nos, QuickFix.FIX42.OrderCancelRequest msg) { }
 
         #endregion
     }

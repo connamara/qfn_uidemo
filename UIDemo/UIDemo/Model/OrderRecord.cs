@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using FIXApplication.Enums;
 
 namespace UIDemo.Model
 {
     public class OrderRecord : NotifyPropertyChangedBase
     {
-        public OrderRecord(string pClOrdID, string pSymbol, string pSide, string pOrdType, decimal pPrice, string pState)
+        public QuickFix.FIX42.NewOrderSingle OriginalNOS { get; private set; }
+        
+        public OrderRecord(QuickFix.FIX42.NewOrderSingle nos)
         {
-            ClOrdID = pClOrdID;
-            Symbol = pSymbol;
-            Side = pSide;
-            OrdType = pOrdType;
-            Price = pPrice;
-            Status = pState;
+            OriginalNOS = nos;
+
+            decimal price = -1;
+            if (nos.OrdType.Obj == QuickFix.Fields.OrdType.LIMIT && nos.IsSetPrice())
+                price = nos.Price.Obj;
+
+            ClOrdID = nos.ClOrdID.Obj;
+            Symbol = nos.Symbol.Obj;
+            Side = FIXApplication.FixEnumTranslator.Translate(nos.Side);
+            OrdType = FIXApplication.FixEnumTranslator.Translate(nos.OrdType);
+            Price = price;
+            Status = "New";
         }
 
         private string _clOrdID = "";
@@ -60,7 +69,12 @@ namespace UIDemo.Model
             set { _status = value; OnPropertyChanged("Status"); }
         }
 
-
+        private string _orderID = "";
+        public string OrderID
+        {
+            get { return _orderID; }
+            set { _status = value; OnPropertyChanged("OrderID"); }
+        }
 
 
     }

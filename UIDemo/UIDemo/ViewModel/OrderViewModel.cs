@@ -210,20 +210,9 @@ namespace UIDemo.ViewModel
                     customFieldsDict,
                     this.OrderType, side, this.Symbol, orderQty, this.TimeInForce, limitPrice);
 
+                OrderRecord r = new OrderRecord(nos);
                 lock (_ordersLock)
                 {
-                    decimal price = -1;
-                    if (nos.OrdType.Obj == QuickFix.Fields.OrdType.LIMIT)
-                        price = nos.Price.Obj;
-
-                    OrderRecord r = new OrderRecord(
-                        nos.ClOrdID.Obj,
-                        nos.Symbol.Obj,
-                        FixEnumTranslator.Translate(nos.Side),
-                        FixEnumTranslator.Translate(nos.OrdType),
-                        price,
-                        "New");
-
                     Orders.Add(r);
                 }
 
@@ -254,6 +243,7 @@ namespace UIDemo.ViewModel
                             r.Status = status;
                             if(msg.IsSetLastPx())
                                 r.Price = msg.LastPx.Obj;
+                            r.OrderID = msg.OrderID.Obj;
                             return;
                         }
                     }
@@ -275,8 +265,10 @@ namespace UIDemo.ViewModel
                     new QuickFix.Fields.OrigClOrdID(or.ClOrdID), // good enough?
                     new QuickFix.Fields.ClOrdID(or.ClOrdID),
                     new QuickFix.Fields.Symbol(or.Symbol),
-                    new QuickFix.Fields.Side('1'), // fix this
+                    or.OriginalNOS.Side,
                     new QuickFix.Fields.TransactTime(DateTime.Now));
+
+                orq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
 
                 _qfapp.Send(orq);
             }

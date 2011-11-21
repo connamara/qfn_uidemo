@@ -10,11 +10,6 @@ namespace FIXApplication
     {
         static private QuickFix.Fields.Account _account = null;
 
-        static public void SetDefaultAccount(string account)
-        {
-            _account = new QuickFix.Fields.Account(account);
-        }
-
         /// <summary>
         /// Create a News message.  Nothing unexpected here.
         /// </summary>
@@ -43,7 +38,7 @@ namespace FIXApplication
         }
 
         /// <summary>
-        /// 
+        /// Create a NewOrderSingle message.
         /// </summary>
         /// <param name="customFields"></param>
         /// <param name="orderType"></param>
@@ -79,10 +74,6 @@ namespace FIXApplication
             // add custom fields
             foreach (KeyValuePair<int,string> p in customFields)
                 nos.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
-
-            // this kludge needs to go
-            if (_account != null)
-                nos.Account = _account;
 
             return nos;
         }

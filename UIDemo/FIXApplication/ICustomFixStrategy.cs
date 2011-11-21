@@ -16,5 +16,12 @@ namespace FIXApplication
 
         void ProcessToAdmin(QuickFix.Message msg, QuickFix.Session session);
         void ProcessToApp(QuickFix.Message msg, QuickFix.Session session);
+
+        /// <summary>
+        /// Modify a newly-created OrderCancelRequest in some way before it is sent out
+        /// </summary>
+        /// <param name="nos">the message that created the order being canceled</param>
+        /// <param name="msg">the cancel message to be modified</param>
+        void ProcessOrderCancelRequest(QuickFix.FIX42.NewOrderSingle nos, QuickFix.FIX42.OrderCancelRequest msg);
     }
 }
