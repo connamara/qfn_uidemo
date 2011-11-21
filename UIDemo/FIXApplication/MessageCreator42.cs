@@ -8,8 +8,6 @@ namespace FIXApplication
 {
     public static class MessageCreator42
     {
-        static private QuickFix.Fields.Account _account = null;
-
         /// <summary>
         /// Create a News message.  Nothing unexpected here.
         /// </summary>
