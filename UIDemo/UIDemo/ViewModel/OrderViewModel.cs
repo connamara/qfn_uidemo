@@ -264,8 +264,8 @@ namespace UIDemo.ViewModel
             try
             {
                 QuickFix.FIX42.OrderCancelRequest ocq = new QuickFix.FIX42.OrderCancelRequest(
-                    new QuickFix.Fields.OrigClOrdID(or.ClOrdID), // good enough?
-                    new QuickFix.Fields.ClOrdID(or.ClOrdID),
+                    new QuickFix.Fields.OrigClOrdID(or.ClOrdID),
+                    MessageCreator42.GenerateClOrdID(),
                     new QuickFix.Fields.Symbol(or.Symbol),
                     or.OriginalNOS.Side,
                     new QuickFix.Fields.TransactTime(DateTime.Now));

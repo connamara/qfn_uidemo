@@ -9,6 +9,16 @@ namespace FIXApplication
     public static class MessageCreator42
     {
         /// <summary>
+        /// Create a new ClOrdID based on the time
+        /// </summary>
+        /// <returns></returns>
+        static public QuickFix.Fields.ClOrdID GenerateClOrdID()
+        {
+            return new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+        }
+
+
+        /// <summary>
         /// Create a News message.  Nothing unexpected here.
         /// </summary>
         /// <param name="headline_str"></param>
@@ -59,7 +69,7 @@ namespace FIXApplication
             QuickFix.Fields.Side fSide = FixEnumTranslator.ToField(side);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
-            QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+            QuickFix.Fields.ClOrdID fClOrdID = GenerateClOrdID();
 
             QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
