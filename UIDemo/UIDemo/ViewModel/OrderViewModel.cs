@@ -263,16 +263,18 @@ namespace UIDemo.ViewModel
         {
             try
             {
-                QuickFix.FIX42.OrderCancelRequest orq = new QuickFix.FIX42.OrderCancelRequest(
+                QuickFix.FIX42.OrderCancelRequest ocq = new QuickFix.FIX42.OrderCancelRequest(
                     new QuickFix.Fields.OrigClOrdID(or.ClOrdID), // good enough?
                     new QuickFix.Fields.ClOrdID(or.ClOrdID),
                     new QuickFix.Fields.Symbol(or.Symbol),
                     or.OriginalNOS.Side,
                     new QuickFix.Fields.TransactTime(DateTime.Now));
 
-                orq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
+                ocq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
 
-                _qfapp.Send(orq);
+                _strategy.ProcessOrderCancelRequest(or.OriginalNOS, ocq);
+
+                _qfapp.Send(ocq);
             }
             catch (Exception e)
             {
