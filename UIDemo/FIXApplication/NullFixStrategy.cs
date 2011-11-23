@@ -20,6 +20,7 @@ namespace FIXApplication
         public void ProcessToApp(QuickFix.Message msg, QuickFix.Session session) { }
 
         public void ProcessOrderCancelRequest(QuickFix.FIX42.NewOrderSingle nos, QuickFix.FIX42.OrderCancelRequest msg) { }
+        public void ProcessOrderCancelReplaceRequest(QuickFix.FIX42.NewOrderSingle nos, QuickFix.FIX42.OrderCancelReplaceRequest msg) { }
 
         #endregion
     }

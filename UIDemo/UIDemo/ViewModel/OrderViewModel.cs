@@ -290,7 +290,18 @@ namespace UIDemo.ViewModel
         /// <param name="newPrice">ignored if not applicable for order type</param>
         public void CancelReplaceOrder(OrderRecord or, int newQty, decimal newPrice)
         {
-            // TODO
+            try
+            {
+                QuickFix.FIX42.OrderCancelReplaceRequest ocrq = MessageCreator42.OrderCancelReplaceRequest(or.OriginalNOS, newQty, newPrice);
+
+                _strategy.ProcessOrderCancelReplaceRequest(or.OriginalNOS, ocrq);
+
+                _qfapp.Send(ocrq);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
         }
     }
 }

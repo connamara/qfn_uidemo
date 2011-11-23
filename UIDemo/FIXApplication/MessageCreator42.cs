@@ -17,6 +17,15 @@ namespace FIXApplication
             return new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
         }
 
+        /// <summary>
+        /// Create a News message that has 0 lines.  Nothing unexpected here.
+        /// </summary>
+        /// <param name="headline_str"></param>
+        /// <returns></returns>
+        static public QuickFix.FIX42.News News(string headline_str)
+        {
+            return News(headline_str, new List<string>());
+        }
 
         /// <summary>
         /// Create a News message.  Nothing unexpected here.
@@ -84,6 +93,26 @@ namespace FIXApplication
                 nos.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
 
             return nos;
+        }
+
+        public static QuickFix.FIX42.OrderCancelReplaceRequest OrderCancelReplaceRequest(
+            QuickFix.FIX42.NewOrderSingle nos, int newQty, decimal newPrice)
+        {
+            QuickFix.FIX42.OrderCancelReplaceRequest ocrq = new QuickFix.FIX42.OrderCancelReplaceRequest(
+                new QuickFix.Fields.OrigClOrdID(nos.ClOrdID.Obj),
+                GenerateClOrdID(),
+                new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE),
+                nos.Symbol,
+                nos.Side,
+                new QuickFix.Fields.TransactTime(DateTime.Now),
+                nos.OrdType);
+
+            ocrq.OrderQty = new QuickFix.Fields.OrderQty(newQty);
+
+            if(nos.OrdType.Obj!=QuickFix.Fields.OrdType.MARKET)
+                ocrq.Price = new QuickFix.Fields.Price(newPrice);
+
+            return ocrq;
         }
     }
 }

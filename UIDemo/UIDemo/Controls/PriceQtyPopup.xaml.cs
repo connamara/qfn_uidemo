@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UIDemo.Model;
 
 namespace UIDemo.Controls
 {
@@ -23,25 +24,24 @@ namespace UIDemo.Controls
         public string QtyString { get; set; }
         public string PriceString { get; set; }
 
-        public PriceQtyPopup(
-            FIXApplication.Enums.OrderType otype,
-            int initialQty,
-            decimal initialPrice)
+        public PriceQtyPopup(OrderRecord or)
         {
             DataContext = this;
 
             IsCancelled = true;
 
-            QtyString = initialQty.ToString();
-            PriceString = initialPrice.ToString();
+            QtyString = or.OriginalNOS.OrderQty.Obj.ToString();
 
             InitializeComponent();
 
-            if (otype == FIXApplication.Enums.OrderType.Market)
+            if (or.OriginalNOS.OrdType.Obj == QuickFix.Fields.OrdType.MARKET)
             {
                 lblPrice.Visibility = Visibility.Collapsed;
                 txtPrice.Visibility = Visibility.Collapsed;
+                PriceString = "0";
             }
+            else
+                PriceString = or.Price.ToString();
         }
 
         private void ClickSubmit(object sender, RoutedEventArgs e)

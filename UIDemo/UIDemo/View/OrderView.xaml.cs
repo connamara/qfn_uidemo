@@ -58,12 +58,7 @@ namespace UIDemo.View
         {
             OrderRecord or = lvOrders.SelectedItem as OrderRecord;
 
-            OrderType otype = FixEnumTranslator.ToEnum(or.OriginalNOS.OrdType);
-            decimal price = (otype== OrderType.Market) ? 0 : or.Price;
-            int qty = decimal.ToInt32(or.OriginalNOS.OrderQty.Obj);
-
-            // need to ask for qty/price
-            PriceQtyPopup pop = new PriceQtyPopup(otype, qty, price);
+            PriceQtyPopup pop = new PriceQtyPopup(or);
             pop.ShowDialog();
 
             if (pop.IsCancelled)
