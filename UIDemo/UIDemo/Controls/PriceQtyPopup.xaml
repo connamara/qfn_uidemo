@@ -1,0 +1,58 @@
+﻿<Window x:Class="UIDemo.Controls.PriceQtyPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:rules="clr-namespace:UIDemo.Controls.ValidationRules"
+    Title="Set New Price and/or Quantity"
+    ResizeMode="NoResize"
+    Width="300"
+    Height="300"
+>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+        <Label FontWeight="Bold" Content="Enter values for replacement order:"/>
+        
+        <Grid HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Content="Quantity:"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Width="80">
+                <TextBox.Text>
+                    <Binding Path="QtyString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <rules:PositiveIntegerRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <Label x:Name="lblPrice" Grid.Column="0" Grid.Row="1" Content="Price:"/>
+            <TextBox x:Name="txtPrice" Grid.Column="1" Grid.Row="1" Width="80">
+                <TextBox.Text>
+                    <Binding Path="PriceString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <rules:PositiveDecimalRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
+
+        <Grid HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Content="Submit" Click="ClickSubmit" Margin="5"/>
+            <Button Grid.Column="1" Content="Cancel" Click="ClickCancel" Margin="5"/>
+        </Grid>
+
+    </StackPanel>
+</Window>

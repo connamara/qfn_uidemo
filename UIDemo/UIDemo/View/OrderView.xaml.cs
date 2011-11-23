@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UIDemo.Model;
 using UIDemo.ViewModel;
+using UIDemo.Controls;
+using FIXApplication.Enums;
+using FIXApplication;
 
 namespace UIDemo.View
 {
@@ -45,6 +48,36 @@ namespace UIDemo.View
 
         private void CanCancelExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
         {
+            // Ideally, this would check to see that the order's state is one that could be canceled
+            // but right now it doesn't.
+            e.CanExecute = (lvOrders.Items.Count > 0) && (lvOrders.SelectedItem != null);
+            e.Handled = true;
+        }
+
+        private void CancelReplaceCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            OrderRecord or = lvOrders.SelectedItem as OrderRecord;
+
+            OrderType otype = FixEnumTranslator.ToEnum(or.OriginalNOS.OrdType);
+            decimal price = (otype== OrderType.Market) ? 0 : or.Price;
+            int qty = decimal.ToInt32(or.OriginalNOS.OrderQty.Obj);
+
+            // need to ask for qty/price
+            PriceQtyPopup pop = new PriceQtyPopup(otype, qty, price);
+            pop.ShowDialog();
+
+            if (pop.IsCancelled)
+                MessageBox.Show("not doing shit");
+            else
+                MessageBox.Show(String.Format("would send C/R with qty={1} and price={0}", pop.PriceString, pop.QtyString));
+
+            (DataContext as OrderViewModel).CancelReplaceOrder(or, int.Parse(pop.QtyString), decimal.Parse(pop.PriceString));
+        }
+
+        private void CanCancelReplaceExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // Ideally, this would check to see that the order's state is one that could be cancel/replaced
+            // but right now it doesn't.
             e.CanExecute = (lvOrders.Items.Count > 0) && (lvOrders.SelectedItem != null);
             e.Handled = true;
         }

@@ -281,5 +281,16 @@ namespace UIDemo.ViewModel
                 Trace.WriteLine(e.ToString());
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="or"></param>
+        /// <param name="newQty"></param>
+        /// <param name="newPrice">ignored if not applicable for order type</param>
+        public void CancelReplaceOrder(OrderRecord or, int newQty, decimal newPrice)
+        {
+            // TODO
+        }
     }
 }

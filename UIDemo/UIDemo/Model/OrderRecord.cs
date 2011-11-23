@@ -69,7 +69,7 @@ namespace UIDemo.Model
             set { _status = value; OnPropertyChanged("Status"); }
         }
 
-        private string _orderID = "";
+        private string _orderID = "(unset)";
         public string OrderID
         {
             get { return _orderID; }
