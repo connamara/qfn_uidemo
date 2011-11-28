@@ -294,6 +294,8 @@ namespace UIDemo.ViewModel
             {
                 QuickFix.FIX42.OrderCancelReplaceRequest ocrq = MessageCreator42.OrderCancelReplaceRequest(or.OriginalNOS, newQty, newPrice);
 
+                ocrq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
+
                 _strategy.ProcessOrderCancelReplaceRequest(or.OriginalNOS, ocrq);
 
                 _qfapp.Send(ocrq);

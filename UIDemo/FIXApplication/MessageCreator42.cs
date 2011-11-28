@@ -112,6 +112,9 @@ namespace FIXApplication
             if(nos.OrdType.Obj!=QuickFix.Fields.OrdType.MARKET)
                 ocrq.Price = new QuickFix.Fields.Price(newPrice);
 
+            // other fields to relay
+            ocrq.TimeInForce = nos.TimeInForce;
+
             return ocrq;
         }
     }
