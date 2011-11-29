@@ -152,6 +152,11 @@ namespace FIXApplication
                 Fix42ExecReportEvent(msg);
         }
 
+        public void OnMessage(QuickFix.FIX42.News msg, QuickFix.SessionID s)
+        {
+            if (msg.Headline.Obj == "TESTECHO")
+                Send(MessageCreator42.News("ECHORESPONSE"));
+        }
 
 
     }

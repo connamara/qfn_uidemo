@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UIDemo.Model;
 using UIDemo.ViewModel;
+using UIDemo.Controls;
+using FIXApplication.Enums;
+using FIXApplication;
 
 namespace UIDemo.View
 {
@@ -45,6 +48,30 @@ namespace UIDemo.View
 
         private void CanCancelExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
         {
+            // Ideally, this would check to see that the order's state is one that could be canceled
+            // but right now it doesn't.
+            e.CanExecute = (lvOrders.Items.Count > 0) && (lvOrders.SelectedItem != null);
+            e.Handled = true;
+        }
+
+        private void CancelReplaceCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            OrderRecord or = lvOrders.SelectedItem as OrderRecord;
+
+            PriceQtyPopup pop = new PriceQtyPopup(or);
+            pop.ShowDialog();
+
+            Dictionary<int, string> customFields = new Dictionary<int, string>();
+            if (pop.IsSetOMFOverride)
+                customFields[9768] = "Y"; // CME-specific kludge
+
+            (DataContext as OrderViewModel).CancelReplaceOrder(or, int.Parse(pop.QtyString), decimal.Parse(pop.PriceString), customFields);
+        }
+
+        private void CanCancelReplaceExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // Ideally, this would check to see that the order's state is one that could be cancel/replaced
+            // but right now it doesn't.
             e.CanExecute = (lvOrders.Items.Count > 0) && (lvOrders.SelectedItem != null);
             e.Handled = true;
         }

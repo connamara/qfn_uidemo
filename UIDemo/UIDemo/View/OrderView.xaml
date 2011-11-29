@@ -248,8 +248,10 @@
                 <ContextMenu x:Key="OrdersContextMenu">
                     <ContextMenu.CommandBindings>
                         <CommandBinding Command="controls:OrderCommands.Cancel" CanExecute="CanCancelExecuteHandler" Executed="CancelCommandHandler"/>
+                        <CommandBinding Command="controls:OrderCommands.CancelReplace" CanExecute="CanCancelReplaceExecuteHandler" Executed="CancelReplaceCommandHandler"/>
                     </ContextMenu.CommandBindings>
-                    <MenuItem Header="Send OrderCancelRequest" Command="controls:OrderCommands.Cancel"/>
+                    <MenuItem Header="Cancel" Command="controls:OrderCommands.Cancel"/>
+                    <MenuItem Header="CancelReplace" Command="controls:OrderCommands.CancelReplace"/>
                 </ContextMenu>
 
                 <Style x:Key="CustomFieldListItemContainerStyle" TargetType="{x:Type ListBoxItem}">
@@ -264,6 +266,7 @@
                     <GridView>
                         <GridView.Columns>
                             <GridViewColumn Header="ClOrdID" DisplayMemberBinding="{Binding Path=ClOrdID}"/>
+                            <GridViewColumn Header="OrderID" DisplayMemberBinding="{Binding Path=OrderID}"/>
                             <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Path=Symbol}"/>
                             <GridViewColumn Header="Side" DisplayMemberBinding="{Binding Path=Side}"/>
                             <GridViewColumn Header="OrdType" DisplayMemberBinding="{Binding Path=OrdType}"/>

@@ -263,16 +263,44 @@ namespace UIDemo.ViewModel
         {
             try
             {
-                QuickFix.FIX42.OrderCancelRequest orq = new QuickFix.FIX42.OrderCancelRequest(
-                    new QuickFix.Fields.OrigClOrdID(or.ClOrdID), // good enough?
-                    new QuickFix.Fields.ClOrdID(or.ClOrdID),
+                QuickFix.FIX42.OrderCancelRequest ocq = new QuickFix.FIX42.OrderCancelRequest(
+                    new QuickFix.Fields.OrigClOrdID(or.ClOrdID),
+                    MessageCreator42.GenerateClOrdID(),
                     new QuickFix.Fields.Symbol(or.Symbol),
                     or.OriginalNOS.Side,
                     new QuickFix.Fields.TransactTime(DateTime.Now));
 
-                orq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
+                ocq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
 
-                _qfapp.Send(orq);
+                _strategy.ProcessOrderCancelRequest(or.OriginalNOS, ocq);
+
+                _qfapp.Send(ocq);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="or"></param>
+        /// <param name="newQty"></param>
+        /// <param name="newPrice">ignored if not applicable for order type</param>
+        /// <param name="customFields">other custom fields to be added</param>
+        public void CancelReplaceOrder(OrderRecord or, int newQty, decimal newPrice, Dictionary<int, string> customFields)
+        {
+            try
+            {
+                QuickFix.FIX42.OrderCancelReplaceRequest ocrq = MessageCreator42.OrderCancelReplaceRequest(
+                    customFields, or.OriginalNOS, newQty, newPrice);
+
+                ocrq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
+
+                _strategy.ProcessOrderCancelReplaceRequest(or.OriginalNOS, ocrq);
+
+                _qfapp.Send(ocrq);
             }
             catch (Exception e)
             {

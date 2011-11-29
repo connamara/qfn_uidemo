@@ -82,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\PriceQtyPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\InstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +122,9 @@
   <ItemGroup>
     <Compile Include="AppContext.cs" />
     <Compile Include="Controls\OrderCommands.cs" />
+    <Compile Include="Controls\PriceQtyPopup.xaml.cs">
+      <DependentUpon>PriceQtyPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ValidationRules.cs" />
     <Compile Include="Model\CustomFieldRecord.cs" />
     <Compile Include="Model\ExecutionRecord.cs" />

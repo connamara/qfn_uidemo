@@ -9,6 +9,25 @@ namespace FIXApplication
     public static class MessageCreator42
     {
         /// <summary>
+        /// Create a new ClOrdID based on the time
+        /// </summary>
+        /// <returns></returns>
+        static public QuickFix.Fields.ClOrdID GenerateClOrdID()
+        {
+            return new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+        }
+
+        /// <summary>
+        /// Create a News message that has 0 lines.  Nothing unexpected here.
+        /// </summary>
+        /// <param name="headline_str"></param>
+        /// <returns></returns>
+        static public QuickFix.FIX42.News News(string headline_str)
+        {
+            return News(headline_str, new List<string>());
+        }
+
+        /// <summary>
         /// Create a News message.  Nothing unexpected here.
         /// </summary>
         /// <param name="headline_str"></param>
@@ -59,7 +78,7 @@ namespace FIXApplication
             QuickFix.Fields.Side fSide = FixEnumTranslator.ToField(side);
             QuickFix.Fields.Symbol fSymbol = new QuickFix.Fields.Symbol(symbol);
             QuickFix.Fields.TransactTime fTransactTime = new QuickFix.Fields.TransactTime(DateTime.Now);
-            QuickFix.Fields.ClOrdID fClOrdID = new QuickFix.Fields.ClOrdID(DateTime.Now.ToString("HHmmssfff"));
+            QuickFix.Fields.ClOrdID fClOrdID = GenerateClOrdID();
 
             QuickFix.FIX42.NewOrderSingle nos = new QuickFix.FIX42.NewOrderSingle(
                 fClOrdID, fHandlInst, fSymbol, fSide, fTransactTime, fOrdType);
@@ -74,6 +93,34 @@ namespace FIXApplication
                 nos.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
 
             return nos;
+        }
+
+        public static QuickFix.FIX42.OrderCancelReplaceRequest OrderCancelReplaceRequest(
+            Dictionary<int, string> customFields,
+            QuickFix.FIX42.NewOrderSingle nos, int newQty, decimal newPrice)
+        {
+            QuickFix.FIX42.OrderCancelReplaceRequest ocrq = new QuickFix.FIX42.OrderCancelReplaceRequest(
+                new QuickFix.Fields.OrigClOrdID(nos.ClOrdID.Obj),
+                GenerateClOrdID(),
+                new QuickFix.Fields.HandlInst(QuickFix.Fields.HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE),
+                nos.Symbol,
+                nos.Side,
+                new QuickFix.Fields.TransactTime(DateTime.Now),
+                nos.OrdType);
+
+            ocrq.OrderQty = new QuickFix.Fields.OrderQty(newQty);
+
+            if(nos.OrdType.Obj!=QuickFix.Fields.OrdType.MARKET)
+                ocrq.Price = new QuickFix.Fields.Price(newPrice);
+
+            // other fields to relay
+            ocrq.TimeInForce = nos.TimeInForce;
+
+            // add custom fields
+            foreach (KeyValuePair<int, string> p in customFields)
+                ocrq.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
+
+            return ocrq;
         }
     }
 }
