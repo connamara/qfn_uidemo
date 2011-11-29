@@ -8,9 +8,6 @@ namespace UIDemo.Model
 {
     public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
     {
-
-
-
         #region INotifyPropertyChanged Members
 
         /// <summary>

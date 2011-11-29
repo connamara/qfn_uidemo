@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UIDemo.Model;
+using System.ComponentModel;
 
 namespace UIDemo.Controls
 {
@@ -21,10 +22,33 @@ namespace UIDemo.Controls
     {
         public bool IsCancelled { get; set; }
 
-        public string QtyString { get; set; }
-        public string PriceString { get; set; }
+        public string QtyString
+        {
+            get { return (string)GetValue(QtyStringProperty); }
+            set { SetValue(QtyStringProperty, value); }
+        }
 
-        public bool IsSetOMFOverride { get; set; }
+        public string PriceString
+        {
+            get { return (string)GetValue(PriceStringProperty); }
+            set { SetValue(PriceStringProperty, value); }
+        }
+
+        public bool IsSetOMFOverride
+        {
+            get { return (bool)GetValue(IsSetOMFOverrideProperty); }
+            set { SetValue(IsSetOMFOverrideProperty, value); }
+        }
+
+        public static readonly DependencyProperty QtyStringProperty =
+            DependencyProperty.Register("QtyString", typeof(string), typeof(PriceQtyPopup), new UIPropertyMetadata("0"));
+        public static readonly DependencyProperty PriceStringProperty =
+            DependencyProperty.Register("PriceString", typeof(string), typeof(PriceQtyPopup), new UIPropertyMetadata("0.0"));
+        public static readonly DependencyProperty IsSetOMFOverrideProperty =
+            DependencyProperty.Register("IsSetOMFOverride", typeof(bool), typeof(PriceQtyPopup), new UIPropertyMetadata(false));
+
+
+
 
         public PriceQtyPopup(OrderRecord or)
         {
@@ -45,6 +69,7 @@ namespace UIDemo.Controls
             else
                 PriceString = or.Price.ToString();
         }
+
 
         private void ClickSubmit(object sender, RoutedEventArgs e)
         {

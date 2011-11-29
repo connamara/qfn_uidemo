@@ -14,10 +14,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -44,7 +44,7 @@
                 </TextBox.Text>
             </TextBox>
             
-            <Border BorderBrush="Gray" BorderThickness="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="15" Padding="5">
+            <Border BorderBrush="Gray" BorderThickness="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="15" Padding="5">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
