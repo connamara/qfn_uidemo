@@ -24,6 +24,8 @@ namespace UIDemo.Controls
         public string QtyString { get; set; }
         public string PriceString { get; set; }
 
+        public bool IsSetOMFOverride { get; set; }
+
         public PriceQtyPopup(OrderRecord or)
         {
             DataContext = this;

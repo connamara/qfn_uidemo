@@ -19,6 +19,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Content="Quantity:"/>
@@ -42,6 +43,20 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
+            
+            <Border BorderBrush="Gray" BorderThickness="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="15" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="(CME-specific kludge)" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="Set OMSOverride=Y?"/>
+                        <CheckBox IsChecked="{Binding Path=IsSetOMFOverride, Mode=TwoWay}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
 
         <Grid HorizontalAlignment="Center">

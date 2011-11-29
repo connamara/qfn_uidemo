@@ -61,12 +61,11 @@ namespace UIDemo.View
             PriceQtyPopup pop = new PriceQtyPopup(or);
             pop.ShowDialog();
 
-            if (pop.IsCancelled)
-                MessageBox.Show("not doing shit");
-            else
-                MessageBox.Show(String.Format("would send C/R with qty={1} and price={0}", pop.PriceString, pop.QtyString));
+            Dictionary<int, string> customFields = new Dictionary<int, string>();
+            if (pop.IsSetOMFOverride)
+                customFields[9768] = "Y"; // CME-specific kludge
 
-            (DataContext as OrderViewModel).CancelReplaceOrder(or, int.Parse(pop.QtyString), decimal.Parse(pop.PriceString));
+            (DataContext as OrderViewModel).CancelReplaceOrder(or, int.Parse(pop.QtyString), decimal.Parse(pop.PriceString), customFields);
         }
 
         private void CanCancelReplaceExecuteHandler(object sender, CanExecuteRoutedEventArgs e)

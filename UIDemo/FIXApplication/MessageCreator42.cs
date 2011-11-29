@@ -96,6 +96,7 @@ namespace FIXApplication
         }
 
         public static QuickFix.FIX42.OrderCancelReplaceRequest OrderCancelReplaceRequest(
+            Dictionary<int, string> customFields,
             QuickFix.FIX42.NewOrderSingle nos, int newQty, decimal newPrice)
         {
             QuickFix.FIX42.OrderCancelReplaceRequest ocrq = new QuickFix.FIX42.OrderCancelReplaceRequest(
@@ -114,6 +115,10 @@ namespace FIXApplication
 
             // other fields to relay
             ocrq.TimeInForce = nos.TimeInForce;
+
+            // add custom fields
+            foreach (KeyValuePair<int, string> p in customFields)
+                ocrq.SetField(new QuickFix.Fields.StringField(p.Key, p.Value));
 
             return ocrq;
         }

@@ -288,11 +288,13 @@ namespace UIDemo.ViewModel
         /// <param name="or"></param>
         /// <param name="newQty"></param>
         /// <param name="newPrice">ignored if not applicable for order type</param>
-        public void CancelReplaceOrder(OrderRecord or, int newQty, decimal newPrice)
+        /// <param name="customFields">other custom fields to be added</param>
+        public void CancelReplaceOrder(OrderRecord or, int newQty, decimal newPrice, Dictionary<int, string> customFields)
         {
             try
             {
-                QuickFix.FIX42.OrderCancelReplaceRequest ocrq = MessageCreator42.OrderCancelReplaceRequest(or.OriginalNOS, newQty, newPrice);
+                QuickFix.FIX42.OrderCancelReplaceRequest ocrq = MessageCreator42.OrderCancelReplaceRequest(
+                    customFields, or.OriginalNOS, newQty, newPrice);
 
                 ocrq.OrderID = new QuickFix.Fields.OrderID(or.OrderID);
 
