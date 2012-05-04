@@ -16,6 +16,17 @@
                 This is an example app demonstrating the use of QuickFIX/N in a UI application.
             </Paragraph>
             
+            <Paragraph Foreground="Red" FontWeight="Bold" TextAlignment="Center">
+                WARNING!
+            </Paragraph>
+
+            <Paragraph Foreground="Red">
+                This is <Bold>NOT</Bold> a production-ready application!  Nearly all FIX interfaces
+                require data-dictionary tweaks and special handling for other quirks.
+                <Bold>There is no application that will work on all FIX connections!</Bold>
+                You must create your own.  This application is just an example.
+            </Paragraph>
+
             <Paragraph>
                 UIDemo intended to be run against the
                 <Span FontStyle="Italic">Executor</Span> example program
