@@ -55,3 +55,19 @@ Issues specific to UIDemo can be submitted at [Github](https://github.com/connam
 For general UIDemo help, you should use the [general QuickFIX/n mailing list](https://groups.google.com/forum/?hl=en#!forum/quickfixn).
 
 For help with QuickFIX/n in general, see [the QuickFIX/n help page](http://quickfixn.org/help).
+
+Credits
+-------
+
+Contributers:
+
+![Connamara Systems](http://www.connamara.com/wp-content/uploads/2016/01/connamara_logo_dark.png)
+
+qfn_uidemo is maintained and funded by [Connamara Systems, llc](http://connamara.com).
+
+The names and logos for Connamara Systems are trademarks of Connamara Systems, llc.
+
+Licensing
+---------
+
+This software is available under the QuickFIX Software License. Please see the [LICENSE](LICENSE) for the terms specified by the QuickFIX Software License.
